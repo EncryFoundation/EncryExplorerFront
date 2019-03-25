@@ -45,6 +45,7 @@ libraryDependencies += guice
 
 libraryDependencies ++= (Seq(
   "net.codingwell" %% "scala-guice" % "4.2.1",
+  "org.webjars" % "bootstrap" % "3.3.6",
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
@@ -54,6 +55,7 @@ libraryDependencies ++= (Seq(
   "org.rudogma" %% "supertagged" % "1.+",
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "org.encry" %% "prism" % "0.2.3",
+  "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSHOT",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ loggingDependencies)
   .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
