@@ -7,8 +7,7 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 
 class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
-  def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] =
-  {
+  def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     val startTime: Long = System.currentTimeMillis
     nextFilter(requestHeader).map { result =>
       val requestTime: Long = System.currentTimeMillis - startTime
