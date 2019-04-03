@@ -5,6 +5,6 @@ case class Transaction(id: String,
                        blockId: String,
                        isCoinbase: Boolean,
                        timestamp: Long,
-                       defaultProofOpt: String)
+                       defaultProofOpt: Option[String])
 
 case class FullFilledTransaction(transaction: Transaction, inputs: List[Input], output: List[Output])

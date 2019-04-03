@@ -1,5 +1,5 @@
 @import java.util.Date
-@(block: Block)
+@(block: Block, minerAddress: String, minerReward: Long)
 
 <html>
 
@@ -113,7 +113,7 @@
                         <!-- Navigation -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="./">
+                            <a class="nav-link" href="/">
                                 <i class="ni ni-tv-2 text-primary"></i> Blocks
                             </a>
                         </li>
@@ -328,6 +328,31 @@
                                             @block.header.equihashSolution
                                             </td>
                                         </tr>
+
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">Miner Address</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                            @minerAddress
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">MinerReward</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                            @minerReward
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -352,28 +377,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @for(transaction <- block.payload) {
+                                    @for(tx <- block.payload) {
                                         <tr>
                                             <td>
-                                                <a href="@routes.TransactionsController.getTransaction(transaction.id)" class="nav-link" target="_blank">
-                                                @transaction.id</a>
+                                                <a href="@routes.TransactionsController.getTransaction(tx.id)" class="nav-link" target="_blank">
+                                                @tx.id</a>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @{
-                                                    new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                                                    new Date(tx.timestamp).format("yyyy-MM-dd HH:mm:ss")
                                                 }
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @transaction.fee
+                                                @tx.fee
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
                                                     @{
-                                                        if(transaction.isCoinbase) "Yes" else None
+                                                        if(tx.isCoinbase) "Yes" else None
                                                     }
                                                 </span>
                                             </td>

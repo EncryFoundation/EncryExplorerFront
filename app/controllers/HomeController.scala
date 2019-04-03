@@ -1,21 +1,39 @@
 package controllers
 
 import javax.inject.{Inject, _}
-import models.{Header, HistoryDao}
+import models.{FullFilledTransaction, Header, HistoryDao, Input, Output, Transaction, TransactionsDao}
 import play.api.mvc._
-
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
-                               historyDao: HistoryDao)
+                               historyDao: HistoryDao,
+                               transactionsDao: TransactionsDao)
                               (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers {
 
   def index(): Action[AnyContent] = Action.async {
     historyDao.lastHeaders(50).map {
       case Nil => NotFound
-      case list: List[Header] => Ok(views.html.index(list))
+      case list: List[Header] =>
+
+        val a: List[(Header, Int)] = list.map { x =>
+
+          x -> Await.result(transactionsDao.transactionsByBlock(x.id), 1.minutes).size
+        }
+        Ok(views.html.index(a))
     }
   }
 
+  def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
+    transactionsDao.transactionById(id).flatMap {
+      case Some(tx) =>
+        val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
+        val inputsF: Future[List[Input]] = transactionsDao.inputsByTransaction(tx.id)
+        for {
+          outputs <- outputsF
+          inputs <- inputsF
+        } yield Some(FullFilledTransaction(tx, inputs, outputs))
+      case _ => Future(Option.empty[FullFilledTransaction])
+    }
 }
