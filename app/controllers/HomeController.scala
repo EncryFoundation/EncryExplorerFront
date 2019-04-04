@@ -15,13 +15,7 @@ class HomeController @Inject()(cc: ControllerComponents,
   def index(): Action[AnyContent] = Action.async {
     historyDao.lastHeaders(50).map {
       case Nil => NotFound
-      case list: List[Header] =>
-
-        val a: List[(Header, Int)] = list.map { x =>
-
-          x -> Await.result(transactionsDao.transactionsByBlock(x.id), 1.minutes).size
-        }
-        Ok(views.html.index(a))
+      case list: List[Header] => Ok(views.html.index(list))
     }
   }
 

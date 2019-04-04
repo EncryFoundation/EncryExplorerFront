@@ -1,5 +1,5 @@
 @import java.util.Date
-@(lastBlocks: List[(Header, Int)])
+@(lastBlocks: List[Header])
 
 <html>
 
@@ -307,22 +307,22 @@
                             @for(p <- lastBlocks) {
                             <tr>
                                 <td>
-                                    @p._1.height
+                                    @p.height
                                 </td>
                                 <td>
-                                    <a href="@routes.BlockController.getBlockView(p._1.id)" class="nav-link" target="_blank">
-                                    @p._1.id</a>
+                                    <a href="@routes.BlockController.getBlockView(p.id)" class="nav-link" target="_blank">
+                                    @p.id</a>
                                 </td>
                                 <td>
                                     @{
-                                    new Date(p._1.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                                    new Date(p.timestamp).format("yyyy-MM-dd HH:mm:ss")
                                     }
                                 </td>
                                 <td>
-                                    @p._1.nonce
+                                    @p.nonce
                                 </td>
                                 <td>
-                                    @p._2
+                                    @p.txCount
                                 </td>
                             </tr>
                             }
