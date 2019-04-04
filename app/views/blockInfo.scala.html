@@ -1,5 +1,5 @@
 @import java.util.Date
-@(block: Block, minerAddress: String, minerReward: Long)
+@(block: Block)
 
 <html>
 
@@ -338,7 +338,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @minerAddress
+                                            @block.header.minerAddress
                                             </td>
                                         </tr>
                                         <tr>
@@ -350,7 +350,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @minerReward
+                                            @block.header.minerReward
                                             </td>
                                         </tr>
                                     </tbody>

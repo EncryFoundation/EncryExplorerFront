@@ -1,21 +1,9 @@
 package controllers
 
-import javax.inject.Inject
 import models.{FullFilledTransaction, Input, Output, TransactionsDao}
-import play.api.libs.circe.Circe
-import play.api.mvc._
-import javax.inject.Inject
-import models._
-import play.api.libs.circe.Circe
-import play.api.mvc._
-import io.circe.syntax._
-import io.circe.generic.auto._
 import javax.inject.{Inject, Singleton}
-import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import scala.concurrent.{ExecutionContext, Future}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
