@@ -7,11 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) {
 
-  def transactionsByBlock(id: String): Future[List[Transaction]] = {
-    val a = dBService.runAsync(getTransactionsByBlockId(id))
-    println(a)
-    a
-  }
+  def transactionsByBlock(id: String): Future[List[Transaction]] = dBService.runAsync(getTransactionsByBlockId(id))
 
   def inputsByTransaction(id: String): Future[List[Input]] = dBService.runAsync(getTransactionInputs(id))
 

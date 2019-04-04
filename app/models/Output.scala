@@ -6,4 +6,5 @@ case class Output(id: String,
                   coinId: String,
                   contractHash: String,
                   data: String,
-                  isActive: Boolean)
+                  isActive: Boolean,
+                  minerAddress: String)

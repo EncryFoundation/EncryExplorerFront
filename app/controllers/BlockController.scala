@@ -1,11 +1,5 @@
 package controllers
 
-import javax.inject.Inject
-import models._
-import play.api.libs.circe.Circe
-import play.api.mvc._
-import io.circe.syntax._
-import io.circe.generic.auto._
 import javax.inject.{Inject, Singleton}
 import models._
 import play.api.libs.circe.Circe
@@ -24,7 +18,6 @@ class BlockController @Inject()(cc: ControllerComponents,
       case _ => NotFound
     }
   }
-
 
   def getBlock(id: String): Future[Option[Block]] = {
     val headerF: Future[Option[Header]] = historyDao.findHeader(id)

@@ -113,7 +113,7 @@
                         <!-- Navigation -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="./">
+                            <a class="nav-link" href="/">
                                 <i class="ni ni-tv-2 text-primary"></i> Blocks
                             </a>
                         </li>
@@ -317,6 +317,7 @@
                                             <th scope="col">Output value</th>
                                             <th scope="col">Output coin</th>
                                             <th scope="col">Output contract hash</th>
+                                            <th scope="col">Recipient address</th>
                                             <th scope="col">Output data</th>
                                         </tr>
                                     </thead>
@@ -344,6 +345,11 @@
                                             <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @output.contractHash
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-dot mr-4">
+                                                @output.minerAddress
                                                 </span>
                                             </td>
                                             <td>

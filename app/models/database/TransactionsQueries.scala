@@ -5,12 +5,9 @@ import models.{Input, Output, Transaction}
 
 object TransactionsQueries {
 
-  def getTransactionsByBlockId(blockId: String): doobie.ConnectionIO[List[Transaction]] = {
-    val a = sql"SELECT * FROM transactions WHERE blockId = $blockId".query[Transaction].to[List]
-    println(s"SELECT * FROM transactions WHERE blockId = $blockId")
-    println(a)
-    a
-  }
+  def getTransactionsByBlockId(blockId: String): doobie.ConnectionIO[List[Transaction]] =
+    sql"SELECT * FROM transactions WHERE blockId = $blockId".query[Transaction].to[List]
+
 
   def getTransactionInputs(transactionId: String): doobie.ConnectionIO[List[Input]] =
     sql"SELECT * FROM inputs WHERE txId = $transactionId".query[Input].to[List]

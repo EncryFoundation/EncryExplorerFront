@@ -3,8 +3,7 @@ package controllers
 import javax.inject.{Inject, _}
 import models.{Header, HistoryDao}
 import play.api.mvc._
-
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
@@ -17,5 +16,4 @@ class HomeController @Inject()(cc: ControllerComponents,
       case list: List[Header] => Ok(views.html.index(list))
     }
   }
-
 }
