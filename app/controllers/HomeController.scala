@@ -1,14 +1,13 @@
 package controllers
 
 import javax.inject.{Inject, _}
-import models.{Header, HistoryDao, TransactionsDao}
+import models.{Header, HistoryDao}
 import play.api.mvc._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
-                               historyDao: HistoryDao,
-                               transactionsDao: TransactionsDao)
+                               historyDao: HistoryDao)
                               (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers {
 
   def index(): Action[AnyContent] = Action.async {
