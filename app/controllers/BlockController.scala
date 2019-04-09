@@ -43,7 +43,8 @@ class BlockController @Inject()(cc: ControllerComponents,
         input <- inp
         } yield FullFilledTransactionApi(tx, directive, output, input)
       }))
-    for {
+    for
+      {
       fullTx <- dir
       header <- headerF
     } yield header match {
