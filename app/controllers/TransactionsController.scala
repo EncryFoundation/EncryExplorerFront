@@ -1,9 +1,12 @@
 package controllers
 
-import models.{FullFilledTransaction, Input, Output, TransactionsDao}
+import io.circe.syntax._
+import io.circe.generic.auto._
+import models.{FullFilledTransaction, Input, Output, Transaction, TransactionsDao}
 import javax.inject.{Inject, Singleton}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -28,5 +31,69 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       case Some(tx) => Ok(views.html.transactionInfo(tx))
       case None     => NotFound
     }
+  }
+
+  def findOutputApi(id: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findOutput(id)
+      .map {
+        case Some(output) => Ok(output.asJson)
+        case None => NotFound
+      }
+  }
+
+  def findOutputsByTxIdApi(id: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findOutputsByTxId(id)
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
+  }
+
+  def findInputApi(id: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findInput(id)
+      .map {
+        case Some(input) => Ok(input.asJson)
+        case None => NotFound
+      }
+  }
+
+  def listInputsByTxIdApi(txId: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .listInputs(txId)
+      .map {
+        case Nil => NotFound
+        case list: List[Input] => Ok(list.asJson)
+      }
+  }
+
+  def findTransactionApi(id: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findTransaction(id)
+      .map {
+        case Some(transaction) => Ok(transaction.asJson)
+        case None => NotFound
+      }
+  }
+
+  def findTransactionByBlockHeightRangeApi(from: Int, to: Int): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findTransactionByBlockHeightRange(from, to)
+      .map {
+        case Nil => NotFound
+        case list: List[Transaction] => Ok(list.asJson)
+      }
+  }
+
+
+  def findOutputByBlockIdApi(id: String): Action[AnyContent] = Action.async {
+    transactionsDao
+      .findOutputByBlockId(id)
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 }

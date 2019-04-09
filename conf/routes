@@ -2,3 +2,18 @@ GET        /                       controllers.HomeController.index
 GET        /assets/*file           controllers.Assets.at(path="/public", file)
 GET        /block/:id              controllers.BlockController.getBlockView(id: String)
 GET        /transaction/:id        controllers.TransactionsController.getTransaction(id: String)
+
+GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
+GET        /api/history/headers/findByCount/:from/:count                 controllers.HomeController.listHeadersByCountApi(from: Int, count: Int)
+GET        /api/history/headers/:modifierId                              controllers.HomeController.findHeaderApi(modifierId: String)
+GET        /api/history/headersAt/:height                                controllers.HomeController.listHeadersAtHeightApi(height: Int)
+GET        /api/history/lastHeaders/:qty                                 controllers.HomeController.listLastHeadersApi(qty: Int)
+GET        /api/history/headers/range/:from/:to                          controllers.HomeController.listHeadersByHeightRangeApi(from: Int, to: Int)
+
+GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
+GET        /api/transactions/tx/:modifierId/outputs                      controllers.TransactionsController.findOutputsByTxIdApi(modifierId: String)
+GET        /api/transactions/block/:modifierId/outputs                   controllers.TransactionsController.findOutputByBlockIdApi(modifierId: String)
+GET        /api/transactions/input/:modifierId                           controllers.TransactionsController.findInputApi(modifierId: String)
+GET        /api/transactions/tx/:id/inputs                               controllers.TransactionsController.listInputsByTxIdApi(id: String)
+GET        /api/transactions/:id                                         controllers.TransactionsController.findTransactionApi(id: String)
+GET        /api/transactions/tx/range/:from/:to                          controllers.TransactionsController.findTransactionByBlockHeightRangeApi(from: Int, to: Int)
