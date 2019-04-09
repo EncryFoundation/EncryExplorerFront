@@ -21,6 +21,7 @@ class BlockController @Inject()(cc: ControllerComponents,
     }
   }
 
+
   def findBlockApi(id: String): Action[AnyContent] = Action.async {
     getFullBlockApiApi(id)
       .map {
