@@ -11,4 +11,5 @@ object HeaderQueries {
 
   def findByIdQuery(id: String): ConnectionIO[Option[Header]] =
     sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
+
 }

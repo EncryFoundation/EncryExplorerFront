@@ -1,5 +1,3 @@
 package models
 
-class Input {
-
-}
+case class Input(bxId: String, txId: String, contract: String, proofs: String)

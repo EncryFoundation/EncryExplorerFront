@@ -300,6 +300,7 @@
                                 <th scope="col">Id</th>
                                 <th scope="col">Timestamp</th>
                                 <th scope="col">Nonce</th>
+                                <th scope="col">TxQty</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -309,7 +310,8 @@
                                     @p.height
                                 </td>
                                 <td>
-                                    @p.id
+                                    <a href="@routes.BlockController.getBlockView(p.id)" class="nav-link" target="_blank">
+                                    @p.id</a>
                                 </td>
                                 <td>
                                     @{
@@ -318,6 +320,9 @@
                                 </td>
                                 <td>
                                     @p.nonce
+                                </td>
+                                <td>
+                                    @p.txCount
                                 </td>
                             </tr>
                             }

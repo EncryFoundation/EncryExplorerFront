@@ -10,4 +10,7 @@ case class Header(id: String,
                   height: Int,
                   nonce: Long,
                   difficulty: Long,
-                  equihashSolution: String)
+                  equihashSolution: String,
+                  txCount: Int,
+                  minerAddress: String,
+                  minerReward: Long)

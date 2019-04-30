@@ -10,4 +10,5 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
   def lastHeaders(qty: Int = 50): Future[List[Header]] = dBService.runAsync(lastBlocks(qty))
 
   def findHeader(id: String): Future[Option[Header]] = dBService.runAsync(findByIdQuery(id))
+
 }
