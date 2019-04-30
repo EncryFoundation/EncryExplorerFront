@@ -31,7 +31,7 @@ val apiDependencies = Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "com.dripower" %% "play-circe" % "2609.1" exclude("io.circe", "*"),
+  "com.dripower" %% "play-circe" % "2711.0" exclude("io.circe", "*"),
   "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.14.1",
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 )
