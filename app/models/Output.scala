@@ -2,7 +2,6 @@ package models
 
 import io.circe.generic.auto._
 import io.circe.Encoder
-import org.encryfoundation.common.Algos
 import io.circe.syntax._
 import models.Output.Proposition
 
