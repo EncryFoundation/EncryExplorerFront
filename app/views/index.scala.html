@@ -150,14 +150,15 @@
             <!-- Brand -->
             <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Encry explorer</a>
             <!-- Form -->
-            <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+            <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto" method="get"
+             id="search-form">
                 <div class="form-group mb-0">
                     <div class="input-group input-group-alternative">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input class="form-control" id="mySearch" placeholder="Search" type="search" value>
-                        <button id="myButton">Search</button>
+                        <input class="form-control" id="mySearch" placeholder="Search" type="search" name="cityName" value>
+                        <button id="myButton" hidden="hidden">Search</button>
                     </div>
                 </div>
             </form>

@@ -3,4 +3,4 @@ GET        /assets/*file                                controllers.Assets.at(pa
 GET        /block/:id                                   controllers.BlockController.getBlockView(id: String)
 GET        /transaction/:id                             controllers.TransactionsController.getTransaction(id: String)
 GET        /wallet/:contractHash/boxes/:from/:to        controllers.WalletController.info(contractHash: String, from: Int, to: Int)
-GET        /search/:search                     controllers.SearchController.search(search:String)
+GET        /search/:search                              controllers.SearchController.search(search:String)
