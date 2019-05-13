@@ -17,4 +17,7 @@ object BoxesQueries {
 
   def getNumberOfAvailableBoxesByBoxId(boxId: String, numberOf: Int): ConnectionIO[Option[Output]] =
     sql"SELECT * FROM outputs WHERE id = $boxId AND outputs.isActive = true".query[Output].to[List].map(_.headOption)
+
+  def getBoxesByContractHash(contractHash: String, from: Int, to: Int): ConnectionIO[List[Output]] =
+    sql"SELECT * FROM outputs WHERE contractHash = $contractHash AND outputs.isActive = true limit ${to - from} offset $from".query[Output].to[List]
 }
