@@ -3,7 +3,7 @@ package controllers
 import models._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,15 +41,18 @@ class SearchController @Inject()(cc: ControllerComponents,
 
     val blockF: Future[Option[Block]] = getBlock(id)
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
+    val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
 
-    val result: Future[(Option[Block], Option[FullFilledTransaction])] = for {
+    val result = for {
       blockOpt       <- blockF
       transactionOpt <- transactionF
-    } yield (blockOpt, transactionOpt)
+      outputOpt      <- outputF
+    } yield (blockOpt, transactionOpt, outputOpt)
 
     result.map {
-      case (blockOpt, _) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
-      case (_, transactionOpt) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
+      case (blockOpt, _, _) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
+      case (_, transactionOpt, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
+        case(_,_,outputOpt) if outputOpt.nonEmpty            => Ok(views.html.outputInfo(outputOpt.get))
       case _ => NotFound
     }
   }
