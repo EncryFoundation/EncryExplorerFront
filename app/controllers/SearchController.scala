@@ -52,7 +52,7 @@ class SearchController @Inject()(cc: ControllerComponents,
     result.map {
       case (blockOpt, _, _) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
       case (_, transactionOpt, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
-        case(_,_,outputOpt) if outputOpt.nonEmpty            => Ok(views.html.outputInfo(outputOpt.get))
+      case (_,_,outputOpt) if outputOpt.nonEmpty             => Ok(views.html.outputInfo(outputOpt.get))
       case _ => NotFound
     }
   }
