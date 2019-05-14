@@ -43,7 +43,7 @@ class SearchController @Inject()(cc: ControllerComponents,
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
     val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
 
-    val result = for {
+    val result: Future[(Option[Block], Option[FullFilledTransaction], Option[Output])] = for {
       blockOpt       <- blockF
       transactionOpt <- transactionF
       outputOpt      <- outputF
