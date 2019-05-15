@@ -11,4 +11,6 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def findHeader(id: String): Future[Option[Header]] = dBService.runAsync(findByIdQuery(id))
 
+  def listHeadersByHeightRange(from: Int): Future[List[Header]] = dBService.runAsync(findByHeightRangeQuery(from))
+
 }

@@ -16,4 +16,13 @@ class HomeController @Inject()(cc: ControllerComponents,
       case list: List[Header] => Ok(views.html.index(list))
     }
   }
+
+  def listHeadersByHeightRangeApi(from: Int): Action[AnyContent] = Action.async {
+    historyDao
+      .listHeadersByHeightRange(from)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(views.html.index(list))
+      }
+  }
 }

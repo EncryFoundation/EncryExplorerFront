@@ -12,4 +12,6 @@ object HeaderQueries {
   def findByIdQuery(id: String): ConnectionIO[Option[Header]] =
     sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
 
+  def findByHeightRangeQuery(from: Int): ConnectionIO[List[Header]] =
+    sql"SELECT * FROM headers WHERE height BETWEEN $from AND $from + 49 ORDER BY height DESC".query[Header].to[List]
 }
