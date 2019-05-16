@@ -50,6 +50,7 @@ libraryDependencies ++= (Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
   "com.iheart" %% "ficus" % "1.4.2",
+  "org.encry" %% "encry-common" % "0.8.6",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",

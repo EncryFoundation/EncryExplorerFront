@@ -14,4 +14,6 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
   def outputsByTransaction(id: String): Future[List[Output]] = dBService.runAsync(getTransactionOutputs(id))
 
   def transactionById(id: String): Future[Option[Transaction]] = dBService.runAsync(getTransactionById(id))
+
+  def outputById(id: String): Future[Option[Output]] = dBService.runAsync(getOutput(id))
 }

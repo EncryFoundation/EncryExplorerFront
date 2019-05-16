@@ -149,6 +149,19 @@
         <div class="container-fluid">
             <!-- Brand -->
             <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Encry explorer</a>
+            <!-- Form -->
+            <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto" method="get"
+             id="search-form">
+                <div class="form-group mb-0">
+                    <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input class="form-control" id="mySearch" placeholder="Search" type="search" name="cityName" value>
+                        <button id="myButton" hidden="hidden">Search</button>
+                    </div>
+                </div>
+            </form>
             <!-- User -->
             <ul class="navbar-nav align-items-center d-none d-md-flex">
                 <li class="nav-item dropdown">
@@ -369,6 +382,7 @@
 <script src="./assets/vendor/chart.js/dist/Chart.extension.js"></script>
 <!-- Argon JS -->
 <script src="./assets/js/argon.js?v=1.0.0"></script>
+<script src="./assets/js/search.js?v=1.0.0"></script>
 </body>
 
 </html>
