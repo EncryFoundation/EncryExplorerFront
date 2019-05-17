@@ -4,3 +4,4 @@ GET        /block/:id                                   controllers.BlockControl
 GET        /transaction/:id                             controllers.TransactionsController.getTransaction(id: String)
 GET        /wallet/:contractHash/boxes/:from/:to        controllers.WalletController.info(contractHash: String, from: Int, to: Int)
 GET        /:to                                         controllers.HomeController.listHeadersByHeightRangeApi(to: Int)
+GET        /search/:search                              controllers.SearchController.search(search:String)
