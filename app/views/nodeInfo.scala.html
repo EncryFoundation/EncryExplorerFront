@@ -29,7 +29,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                     <!-- Brand -->
-                <a class="navbar-brand pt-0" href="./index.html">
+                <a class="navbar-brand pt-0" href="./">
                     <img src="../assets/img/brand/encry-logo.png" class="navbar-brand-img" alt="...">
                 </a>
                     <!-- User -->
@@ -157,69 +157,35 @@
                     <div class="col-xl-12 mb-5 mb-xl-0">
                         <div class="card shadow">
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Output Info</h3>
+                                <h3 class="mb-0">Node Info</h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Ip</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Last Block Id</th>
+                                            <th scope="col">Last Block Height</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        @for(n <- nodes) {
+                                    @for(n <- nodes) {
                                         <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Output id</span>
-                                                    </div>
-                                                </div>
-                                            </th>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
                                                 @n.ip
-                                                </span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transaction Id</span>
-                                                    </div>
-                                                </div>
-                                            </th>
                                             <td>
-                                            <span class="badge badge-dot mr-4">
                                                 @n.status
-                                            </span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Monetary Value</span>
-                                                    </div>
-                                                </div>
-                                            </th>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
                                                 @n.lastFullBlock
-                                                </span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Nonce</span>
-                                                    </div>
-                                                </div>
-                                            </th>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
                                                 @n.lastFullHeight
-                                                </span>
                                             </td>
                                         </tr>
-                                        }
+                                    }
                                     </tbody>
                                 </table>
                             </div>
