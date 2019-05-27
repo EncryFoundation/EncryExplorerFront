@@ -1,5 +1,5 @@
 @import java.util.Date
-@(lastBlocks: List[Header])
+@(lastBlocks: List[Header], bestHeight: Int)
 
 <html>
 
@@ -299,9 +299,26 @@
                             <div class="col">
                                 <h3 class="mb-0">Blocks</h3>
                             </div>
-                            <div class="col text-right">
-                                <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                            </div>
+                            <nav aria-label="...">
+                                <ul id="demo" class="pagination justify-content-end mb-0">
+                                    <li class="page-item">
+                                        <a class="page-link" href="
+                                            @routes.HomeController.listHeadersByHeightRangeApi(
+                                                if (lastBlocks.head.height + 50 > bestHeight) bestHeight
+                                                else lastBlocks.head.height + 50)
+                                            " tabindex="-1">
+                                            <i class="fas fa-angle-left"></i>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@routes.HomeController.listHeadersByHeightRangeApi(lastBlocks.head.height-50)">
+                                            <i class="fas fa-angle-right"></i>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                     <div class="table-responsive">
