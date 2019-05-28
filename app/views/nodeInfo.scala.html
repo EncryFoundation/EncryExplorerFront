@@ -176,7 +176,9 @@
                                                 @n.ip
                                             </td>
                                             <td>
-                                                @n.status
+                                                @{
+                                                    if (n.status) "Online" else "Offline"
+                                                }
                                             </td>
                                             <td>
                                                 @n.lastFullBlock
