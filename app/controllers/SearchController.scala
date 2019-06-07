@@ -2,15 +2,18 @@ package controllers
 
 import models._
 import javax.inject.{Inject, Singleton}
+import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
+import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SearchController @Inject()(cc: ControllerComponents,
                                  transactionsDao: TransactionsDao,
-                                 historyDao: HistoryDao)
+                                 historyDao: HistoryDao,
+                                 boxesDao: BoxesDao)
                                 (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def getBlock(id: String): Future[Option[Block]] = {
@@ -37,22 +40,30 @@ class SearchController @Inject()(cc: ControllerComponents,
       case _ => Future(Option.empty[FullFilledTransaction])
     }
 
+  private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
+    case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
+    case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
+  }.getOrElse(throw EncryAddress.InvalidAddressException)
+
   def search(id: String): Action[AnyContent] = Action.async {
 
     val blockF: Future[Option[Block]] = getBlock(id)
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
     val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
+    val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(contractHashByAddress(id))
 
-    val result: Future[(Option[Block], Option[FullFilledTransaction], Option[Output])] = for {
+    val result: Future[(Option[Block], Option[FullFilledTransaction], Option[Output], List[Wallet])] = for {
       blockOpt       <- blockF
       transactionOpt <- transactionF
       outputOpt      <- outputF
-    } yield (blockOpt, transactionOpt, outputOpt)
+      walletOpt      <- walletF
+    } yield (blockOpt, transactionOpt, outputOpt, walletOpt)
 
     result.map {
-      case (blockOpt, _, _) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
-      case (_, transactionOpt, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
-      case (_,_,outputOpt) if outputOpt.nonEmpty             => Ok(views.html.outputInfo(outputOpt.get))
+      case (blockOpt, _, _,_) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
+      case (_, transactionOpt, _, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
+      case (_,_,outputOpt,_) if outputOpt.nonEmpty             => Ok(views.html.outputInfo(outputOpt.get))
+      case (_, _, _, walletOpt) if walletOpt.nonEmpty           => Ok(views.html.wallet(walletOpt))
       case _ => NotFound
     }
   }

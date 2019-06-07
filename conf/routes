@@ -5,3 +5,4 @@ GET        /transaction/:id                             controllers.Transactions
 GET        /wallet/:contractHash/boxes/:from/:to        controllers.WalletController.info(contractHash: String, from: Int, to: Int)
 GET        /:to                                         controllers.HomeController.listHeadersByHeightRangeApi(to: Int)
 GET        /search/:search                              controllers.SearchController.search(search:String)
+GET        /wallet/:contractHash                        controllers.WalletController.getWalletByAddress(contractHash: String)
