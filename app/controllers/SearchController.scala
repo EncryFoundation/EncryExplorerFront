@@ -63,7 +63,7 @@ class SearchController @Inject()(cc: ControllerComponents,
       case (blockOpt, _, _,_) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
       case (_, transactionOpt, _, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
       case (_,_,outputOpt,_) if outputOpt.nonEmpty             => Ok(views.html.outputInfo(outputOpt.get))
-      case (_, _, _, walletOpt) if walletOpt.nonEmpty           => Ok(views.html.wallet(walletOpt))
+//      case (_, _, _, walletOpt) if walletOpt.nonEmpty           => Ok(views.html.wallet(walletOpt))
       case _ => NotFound
     }
   }
