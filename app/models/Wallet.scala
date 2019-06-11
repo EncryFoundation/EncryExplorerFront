@@ -2,13 +2,15 @@ package models
 
 import settings.Utils
 
-case class Wallet (hash: String,
+case class Wallet (idx: Int,
+                   hash: String,
                    amount: Long,
                    tokenId: String)
 
 object Wallet{
   val ett: String = Utils.EttTokenId
-  def apply(hash: String, amount: Long, tokenId: String): Wallet = new Wallet(
+  def apply(idx: Int, hash: String, amount: Long, tokenId: String): Wallet = new Wallet(
+    idx,
     hash,
     amount,
     tokenId match {

@@ -29,9 +29,10 @@ class WalletController @Inject()(cc: ControllerComponents,
       val walletF: Future[List[Wallet]] =  boxesDao.getWalletByHash(contractHashByAddress(contractHash))
       val txIdF: Future[List[String]] = boxesDao.getTxIdByHash(contractHashByAddress(contractHash))
      // val txsF = txIdF.flatMap(f => Future.sequence(f.map(id => transactionsDao.transactionById(id))))
-      val txsF = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxsById(id))))
+      val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxsById(id))))
 
-   val result: Future[(List[Wallet], List[Option[Transaction]])] = for {
+
+   val result: Future[(List[Wallet], List[Transaction])] = for {
       wallet <- walletF
       txs    <- txsF
     } yield (wallet, txs)

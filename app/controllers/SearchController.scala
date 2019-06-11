@@ -43,7 +43,7 @@ class SearchController @Inject()(cc: ControllerComponents,
   private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
     case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
     case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
-  }.getOrElse(throw EncryAddress.InvalidAddressException)
+  }getOrElse(address)
 
   def search(id: String): Action[AnyContent] = Action.async {
 
@@ -51,19 +51,22 @@ class SearchController @Inject()(cc: ControllerComponents,
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
     val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
     val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(contractHashByAddress(id))
+    val txIdF: Future[List[String]] = boxesDao.getTxIdByHash(contractHashByAddress(id))
+    val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxsById(id))))
 
-    val result: Future[(Option[Block], Option[FullFilledTransaction], Option[Output], List[Wallet])] = for {
+    val result = for {
       blockOpt       <- blockF
       transactionOpt <- transactionF
       outputOpt      <- outputF
       walletOpt      <- walletF
-    } yield (blockOpt, transactionOpt, outputOpt, walletOpt)
+      txsOpt         <- txsF
+    } yield (blockOpt, transactionOpt, outputOpt, walletOpt, txsOpt)
 
     result.map {
-      case (blockOpt, _, _,_) if blockOpt.nonEmpty             => Ok(views.html.blockInfo(blockOpt.get))
-      case (_, transactionOpt, _, _) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
-      case (_,_,outputOpt,_) if outputOpt.nonEmpty             => Ok(views.html.outputInfo(outputOpt.get))
-//      case (_, _, _, walletOpt) if walletOpt.nonEmpty           => Ok(views.html.wallet(walletOpt))
+      case (blockOpt, _, _,_,_) if blockOpt.nonEmpty              => Ok(views.html.blockInfo(blockOpt.get))
+      case (_, transactionOpt, _, _,_) if transactionOpt.nonEmpty => Ok(views.html.transactionInfo(transactionOpt.get))
+      case (_,_,outputOpt,_,_) if outputOpt.nonEmpty              => Ok(views.html.outputInfo(outputOpt.get))
+      case (_, _, _, walletOpt,txsOpt) if walletOpt.nonEmpty && txsOpt.nonEmpty         => Ok(views.html.wallet(walletOpt, txsOpt))
       case _ => NotFound
     }
   }
