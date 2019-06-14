@@ -1,5 +1,5 @@
 @import java.util.Date
-@(tx: FullFilledTransaction)
+@(nodes: List[Node])
 
 <html>
 
@@ -29,7 +29,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                     <!-- Brand -->
-                <a class="navbar-brand pt-0" href="../">
+                <a class="navbar-brand pt-0" href="./">
                     <img src="../assets/img/brand/encry-logo.png" class="navbar-brand-img" alt="...">
                 </a>
                     <!-- User -->
@@ -118,40 +118,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../">
+                            <a class="nav-link" href="./">
                                 <i class="ni ni-tv-2 text-blue"></i> Nodes
                             </a>
                         </li>
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/icons.html">-->
-                            <!--<i class="ni ni-planet text-blue"></i> Icons-->
-                            <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/maps.html">-->
-                            <!--<i class="ni ni-pin-3 text-orange"></i> Maps-->
-                            <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/profile.html">-->
-                            <!--<i class="ni ni-single-02 text-yellow"></i> User profile-->
-                            <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/tables.html">-->
-                            <!--<i class="ni ni-bullet-list-67 text-red"></i> Tables-->
-                            <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/login.html">-->
-                            <!--<i class="ni ni-key-25 text-info"></i> Login-->
-                            <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item">-->
-                            <!--<a class="nav-link" href="./examples/register.html">-->
-                            <!--<i class="ni ni-circle-08 text-pink"></i> Register-->
-                            <!--</a>-->
-                            <!--</li>-->
                     </ul>
                         <!-- Divider -->
                     <hr class="my-3">
@@ -175,7 +145,7 @@
                 <div class="container-fluid">
                         <!-- Brand -->
                     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="@routes.HomeController.index()">
-                        Transaction Info</a>
+                        Node Info</a>
                 </div>
             </nav>
                 <!-- Header -->
@@ -187,175 +157,34 @@
                     <div class="col-xl-12 mb-5 mb-xl-0">
                         <div class="card shadow">
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Transaction Info</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table align-items-center table-flush">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transaction id</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @tx.transaction.id
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transaction fee</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @tx.transaction.fee
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Is CoinBase</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @tx.transaction.isCoinbase
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transaction timestamp</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @{
-                                                new Date(tx.transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
-                                            }
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transaction defaultProofOpt</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @tx.transaction.defaultProofOpt
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    <!-- Table -->
-                <div class="row mt-5">
-                    <div class="col-xl-12 mb-5 mb-xl-0">
-                        <div class="card shadow">
-                            <div class="card-header border-0">
-                                <h3 class="mb-0">Transaction Inputs</h3>
+                                <h3 class="mb-0">Node Info</h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">Input ID</th>
-                                            <th scope="col">Input contract</th>
-                                            <th scope="col">Input proofs</th>
+                                            <th scope="col">Ip</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Last Block Id</th>
+                                            <th scope="col">Last Block Height</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @for(input <- tx.inputs) {
+                                    @for(n <- nodes) {
                                         <tr>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @input.bxId
-                                                </span>
+                                                @n.ip
                                             </td>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @input.contract
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @input.proofs
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    <!-- Table -->
-                <div class="row mt-5">
-                    <div class="col-xl-12 mb-5 mb-xl-0">
-                        <div class="card shadow">
-                            <div class="card-header border-0">
-                                <h3 class="mb-0">Transaction Outputs</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table align-items-center table-flush">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Output ID</th>
-                                            <th scope="col">Output value</th>
-                                            <th scope="col">Output coin</th>
-                                            <th scope="col">Output contract hash</th>
-                                            <th scope="col">Recipient address</th>
-                                            <th scope="col">Output data</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @for(output <- tx.output) {
-                                        <tr>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.id
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.value
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
                                                 @{
-                                                    if(output.tokenId == "487291c237b68dd2ab213be6b5d1174666074a5afab772b600ea14e8285affab")
-                                                    "Encry Coin" else output.tokenId
+                                                    if (n.status) "Online" else "Offline"
                                                 }
-                                                </span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.proposition
-                                                </span>
+                                                @n.lastFullBlock
                                             </td>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.minerAddress
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.data
-                                                </span>
+                                                @n.lastFullHeight
                                             </td>
                                         </tr>
                                     }

@@ -21,6 +21,7 @@ class WalletController @Inject()(cc: ControllerComponents,
     boxesDao.getBoxesByContractHash(contractHash, from: Int, to: Int).map {
       case Nil => NotFound
       case list: List[Output] => Ok(list.asJson)
+
     }
   }
 
