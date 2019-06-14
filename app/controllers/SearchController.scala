@@ -6,7 +6,7 @@ import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAdd
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
 import scorex.crypto.encode.Base16
-
+import settings.Utils
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,19 +40,14 @@ class SearchController @Inject()(cc: ControllerComponents,
       case _ => Future(Option.empty[FullFilledTransaction])
     }
 
-  private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
-    case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
-    case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
-  }getOrElse(address)
-
   def search(id: String): Action[AnyContent] = Action.async {
 
     val blockF: Future[Option[Block]] = getBlock(id)
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
     val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
-    val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(contractHashByAddress(id))
-    val txIdF: Future[List[String]] = boxesDao.getTxIdByHash(contractHashByAddress(id))
-    val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxsById(id))))
+    val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(Utils.contractHashByAddress(id))
+    val txIdF: Future[List[String]] = boxesDao.getTxsIdByHash(Utils.contractHashByAddress(id))
+    val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
 
     val result = for {
       blockOpt       <- blockF

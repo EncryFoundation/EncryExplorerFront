@@ -13,10 +13,10 @@ class BoxesDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext){
   def getWalletByHash(contractHash: String): Future[List[Wallet]] =
     dBService.runAsync(WalletQueries.getWallet(contractHash))
 
-  def getTxIdByHash(contractHash: String): Future[List[String]] =
+  def getTxsIdByHash(contractHash: String): Future[List[String]] =
     dBService.runAsync(WalletQueries.getTxsIdByHash(contractHash))
 
-  def getLastTxsById(Id: String): Future[Transaction] =
+  def getLastTxById(Id: String): Future[Transaction] =
     dBService.runAsync(WalletQueries.getLastTxsByHash(Id))
 
 }
