@@ -18,6 +18,11 @@
     <link href="./assets/vendor/fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href="./assets/css/argon.css?v=1.0.0" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <!-- Roboto Webfont -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+    <link type="text/css" href="./assets/css/search.css?v=1.0.0" rel="stylesheet">
+
 </head>
 
 <body>
@@ -96,6 +101,11 @@
                         <i class="ni ni-tv-2 text-blue"></i> Nodes
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#search">
+                        <i class="ni ni-money-coins text-green"></i> Wallet
+                    </a>
+                </li>
                 <!--<li class="nav-item">-->
                     <!--<a class="nav-link" href="./examples/icons.html">-->
                         <!--<i class="ni ni-planet text-blue"></i> Icons-->
@@ -150,6 +160,13 @@
             <!-- Brand -->
             <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./">Encry explorer</a>
             <!-- Form -->
+            <div id="search">
+                <span class="close">X</span>
+                <form role="search" id="searchform" method="get">
+                    <input value="" name="cityNamee" id="mySearchh" type="search" placeholder="Type your address"/>
+                    <button id="myButton" hidden="hidden">Search</button>
+                </form>
+            </div>
             <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto" method="get"
              id="search-form">
                 <div class="form-group mb-0">

@@ -5,7 +5,8 @@ import io.circe.Encoder
 import io.circe.syntax._
 import models.Output.Proposition
 
-case class Output(id: String,
+case class Output(idx: Int,
+                  id: String,
                   `type`: Long,
                   txId: String,
                   value: Long,
@@ -20,7 +21,8 @@ object Output{
 
   case class Proposition(contractHash: String)
 
-  def apply(id: String,
+  def apply(idx: Int,
+            id: String,
             `type`: Long,
             txId: String,
             value: Long,
@@ -29,5 +31,5 @@ object Output{
             proposition: String,
             data: String,
             isActive: Boolean,
-            minerAddress: String): Output = new Output(id, `type`, txId, value, nonce, tokenId, Proposition(proposition), data, isActive, minerAddress)
+            minerAddress: String): Output = new Output(idx, id, `type`, txId, value, nonce, tokenId, Proposition(proposition), data, isActive, minerAddress)
 }
