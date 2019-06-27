@@ -1,7 +1,6 @@
 package models
 
-case class Header(idx: Int,
-                  id: String,
+case class Header(id: String,
                   version: Int,
                   parentId: String,
                   adProofsRoot: String,

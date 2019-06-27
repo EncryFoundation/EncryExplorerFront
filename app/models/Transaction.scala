@@ -1,7 +1,6 @@
 package models
 
-case class Transaction(idx: Int,
-                       id: String,
+case class Transaction(id: String,
                        fee: Long,
                        blockId: String,
                        isCoinbase: Boolean,
