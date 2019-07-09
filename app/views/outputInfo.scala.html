@@ -1,5 +1,5 @@
 @import java.util.Date
-@(block: Block)
+@(output: Output)
 
 <html>
 
@@ -29,7 +29,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                     <!-- Brand -->
-                <a class="navbar-brand pt-0" href="../">
+                <a class="navbar-brand pt-0" href="./index.html">
                     <img src="../assets/img/brand/encry-logo.png" class="navbar-brand-img" alt="...">
                 </a>
                     <!-- User -->
@@ -118,7 +118,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../node">
+                            <a class="nav-link" href="./">
                                 <i class="ni ni-tv-2 text-blue"></i> Nodes
                             </a>
                         </li>
@@ -175,7 +175,7 @@
                 <div class="container-fluid">
                         <!-- Brand -->
                     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="@routes.HomeController.index()">
-                        Block Info</a>
+                        Output Info</a>
                 </div>
             </nav>
                 <!-- Header -->
@@ -187,7 +187,7 @@
                     <div class="col-xl-12 mb-5 mb-xl-0">
                         <div class="card shadow">
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Block</h3>
+                                <h3 class="mb-0">Output Info</h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
@@ -196,100 +196,37 @@
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">Block ID</span>
+                                                        <span class="mb-0 text-sm">Output id</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.id
+                                            @output.id
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">Version</span>
+                                                        <span class="mb-0 text-sm">Transaction Id</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.version
+                                                <a href="@routes.TransactionsController.getTransaction(output.txId)" class="nav-link" target="_blank">
+                                                @output.txId</a>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">Parent ID</span>
+                                                        <span class="mb-0 text-sm">Monetary Value</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.parentId
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">adProofs Root</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.adProofsRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">State Root</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.stateRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transactions Root</span>
-
-
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.transactionsRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Timestamp</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @{
-                                                new Date(block.header.timestamp).format("yyyy-MM-dd HH:mm:ss")
-                                            }
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Height</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.height
+                                            @output.value
                                             </td>
                                         </tr>
                                         <tr>
@@ -301,34 +238,45 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.nonce
+                                            @output.nonce
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">Difficulty</span>
+                                                        <span class="mb-0 text-sm">CoinId</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.difficulty
+                                            @output.tokenId
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">EquihashSolution</span>
+                                                        <span class="mb-0 text-sm">Contract Hash</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.equihashSolution
+                                            @output.proposition
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">Data</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                            @output.data
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <th scope="row">
                                                 <div class="media align-items-center">
@@ -338,72 +286,9 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.minerAddress
+                                            @output.minerAddress
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Miner Reward</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.minerReward
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    <!-- Table -->
-                <div class="row mt-5">
-                    <div class="col-xl-12 mb-5 mb-xl-0">
-                        <div class="card shadow">
-                            <div class="card-header border-0">
-                                <h3 class="mb-0">Block Transactions</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table align-items-center table-flush">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Transaction id</th>
-                                            <th scope="col">Transaction timestamp</th>
-                                            <th scope="col">Transaction fee</th>
-                                            <th scope="col">is CoinBase</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @for(tx <- block.payload) {
-                                        <tr>
-                                            <td>
-                                                <a href="@routes.TransactionsController.getTransaction(tx.id)" class="nav-link" target="_blank">
-                                                @tx.id</a>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @{
-                                                    new Date(tx.timestamp).format("yyyy-MM-dd HH:mm:ss")
-                                                }
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @tx.fee
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    @{
-                                                        if(tx.isCoinbase) "Yes" else None
-                                                    }
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    }
                                     </tbody>
                                 </table>
                             </div>

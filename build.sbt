@@ -31,7 +31,7 @@ val apiDependencies = Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "com.dripower" %% "play-circe" % "2609.1" exclude("io.circe", "*"),
+  "com.dripower" %% "play-circe" % "2711.0" exclude("io.circe", "*"),
   "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.14.1",
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 )
@@ -50,6 +50,7 @@ libraryDependencies ++= (Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
   "com.iheart" %% "ficus" % "1.4.2",
+  "org.encry" %% "encry-common" % "0.8.6",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",

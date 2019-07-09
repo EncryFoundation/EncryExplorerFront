@@ -1,5 +1,5 @@
 @import java.util.Date
-@(block: Block)
+@(wallet: List[Wallet], transaction: List[Transaction])
 
 <html>
 
@@ -29,7 +29,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                     <!-- Brand -->
-                <a class="navbar-brand pt-0" href="../">
+                <a class="navbar-brand pt-0" href="./index.html">
                     <img src="../assets/img/brand/encry-logo.png" class="navbar-brand-img" alt="...">
                 </a>
                     <!-- User -->
@@ -113,7 +113,7 @@
                         <!-- Navigation -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/">
+                            <a class="nav-link" href="../">
                                 <i class="ni ni-tv-2 text-primary"></i> Blocks
                             </a>
                         </li>
@@ -175,7 +175,7 @@
                 <div class="container-fluid">
                         <!-- Brand -->
                     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="@routes.HomeController.index()">
-                        Block Info</a>
+                        Wallet Info</a>
                 </div>
             </nav>
                 <!-- Header -->
@@ -187,184 +187,49 @@
                     <div class="col-xl-12 mb-5 mb-xl-0">
                         <div class="card shadow">
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Block</h3>
+                                <h4 class="mb-0">Contract Hash / @for(wal <- wallet){<td>
+                                    <span class="badge badge-dot mr-4">
+                                    @wal.hash
+                                    </span>
+                                </td>
+                                }
+                                </h4>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Token</th>
+                                            <th scope="col">Balance</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Block ID</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.id
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Version</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.version
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Parent ID</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.parentId
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">adProofs Root</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.adProofsRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">State Root</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.stateRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Transactions Root</span>
+                                        @for(wal <- wallet) {
+                                            <tr>
+                                                <td>
+                                                    <span class="badge badge-dot mr-4">
+                                                    @wal.tokenId
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-dot mr-4">
+                                                    @wal.amount
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        }
 
-
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.transactionsRoot
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Timestamp</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @{
-                                                new Date(block.header.timestamp).format("yyyy-MM-dd HH:mm:ss")
-                                            }
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Height</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.height
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Nonce</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.nonce
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Difficulty</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.difficulty
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">EquihashSolution</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.equihashSolution
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Miner Address</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.minerAddress
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">Miner Reward</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                            @block.header.minerReward
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                    <!-- Table -->
                 <div class="row mt-5">
                     <div class="col-xl-12 mb-5 mb-xl-0">
                         <div class="card shadow">
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Block Transactions</h3>
+                                <h3 class="mb-0">Last 50 blocks</h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
@@ -377,7 +242,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @for(tx <- block.payload) {
+                                    @for(tx <- transaction) {
                                         <tr>
                                             <td>
                                                 <a href="@routes.TransactionsController.getTransaction(tx.id)" class="nav-link" target="_blank">
@@ -397,9 +262,9 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                    @{
-                                                        if(tx.isCoinbase) "Yes" else None
-                                                    }
+                                                @{
+                                                    if(tx.isCoinbase) "Yes" else None
+                                                }
                                                 </span>
                                             </td>
                                         </tr>
