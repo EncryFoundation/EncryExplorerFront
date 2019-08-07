@@ -4,14 +4,10 @@ import com.typesafe.scalalogging.StrictLogging
 import javax.inject.Inject
 import models._
 import play.api.libs.circe.Circe
-
 import scala.concurrent._
-import scala.concurrent.duration._
 import io.circe.generic.auto._
 import io.circe.syntax._
-import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import play.api.mvc._
-import scorex.crypto.encode.Base16
 import settings.Utils
 
 class WalletController @Inject()(cc: ControllerComponents,
