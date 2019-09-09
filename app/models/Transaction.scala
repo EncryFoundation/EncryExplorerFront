@@ -7,4 +7,4 @@ case class Transaction(id: String,
                        timestamp: Long,
                        defaultProofOpt: Option[String])
 
-case class FullFilledTransaction(transaction: Transaction, inputs: List[Input], output: List[Output], contract: Contract)
+case class FullFilledTransaction(transaction: Transaction, inputs: List[Input], output: List[Output], contract: List[Contract])

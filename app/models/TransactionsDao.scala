@@ -17,5 +17,5 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
 
   def outputById(id: String): Future[Option[Output]] = dBService.runAsync(getOutput(id))
 
-  def contractByTransaction(id: String): Future[Option[Contract]] = dBService.runAsync(getContract(id))
+  def contractByTransaction(id: String): Future[List[Contract]] = dBService.runAsync(getContract(id))
 }

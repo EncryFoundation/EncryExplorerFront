@@ -17,15 +17,13 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       case Some(tx) =>
         val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
         val inputsF:  Future[List[Input]]  = transactionsDao.inputsByTransaction(tx.id)
-        val contractF: Future[Option[Contract]] = transactionsDao.contractByTransaction(tx.id)
+        val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
         for {
           outputs  <- outputsF
           inputs   <- inputsF
-          contractOpt <- contractF
-        } yield contractOpt match {
-          case Some(value) => Some(FullFilledTransaction(tx, inputs, outputs, value))
-          case _ => None
-        }
+          contract <- contractF
+        } yield  Some(FullFilledTransaction(tx, inputs, outputs, contract))
+
       case _ => Future(Option.empty[FullFilledTransaction])
     }
 
