@@ -32,11 +32,16 @@ class SearchController @Inject()(cc: ControllerComponents,
     transactionsDao.transactionById(id).flatMap {
       case Some(tx) =>
         val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
-        val inputsF: Future[List[Input]]   = transactionsDao.inputsByTransaction(tx.id)
+        val inputsF:  Future[List[Input]]  = transactionsDao.inputsByTransaction(tx.id)
+        val contractF: Future[Option[Contract]] = transactionsDao.contractByTransaction(tx.id)
         for {
-          outputs <- outputsF
-          inputs  <- inputsF
-        } yield Some(FullFilledTransaction(tx, inputs, outputs))
+          outputs  <- outputsF
+          inputs   <- inputsF
+          contractOpt <- contractF
+        } yield contractOpt match {
+          case Some(value) => Some(FullFilledTransaction(tx, inputs, outputs, value))
+          case _ => None
+        }
       case _ => Future(Option.empty[FullFilledTransaction])
     }
 
