@@ -1,7 +1,7 @@
 package models.database
 
 import doobie.implicits._
-import models.{Input, Output, Transaction}
+import models.{Contract, Input, Output, Transaction}
 
 object TransactionsQueries {
 
@@ -19,4 +19,7 @@ object TransactionsQueries {
 
   def getOutput(id: String): doobie.ConnectionIO[Option[Output]] =
     sql"SELECT * FROM outputs WHERE id = $id".query[Output].to[List].map(_.headOption)
+
+  def getContract(transactionId: String): doobie.ConnectionIO[List[Contract]] =
+    sql"select * from contracts where hash IN (select contract from inputs where txId = $transactionId)".query[Contract].to[List]
 }
