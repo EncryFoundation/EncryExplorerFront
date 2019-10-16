@@ -6,4 +6,5 @@ GET        /wallet/:contractHash/boxes/:from/:to        controllers.WalletContro
 GET        /search/:search                              controllers.SearchController.search(search:String)
 GET        /wallet/:contractHash                        controllers.WalletController.getWalletByAddress(contractHash: String)
 GET        /node                                        controllers.NodeController.nodes()
+GET        /uncom_trans                                 controllers.TransactionsController.getUncomTransactions()
 GET        /:to                                         controllers.HomeController.listHeadersByHeightRangeApi(to: Int)

@@ -1,11 +1,12 @@
 package models
 
 import javax.inject.Inject
-import models.database.DBService
+import models.database.{DBService, DataService}
 import models.database.TransactionsQueries._
+
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) {
+class TransactionsDao @Inject()(dBService: DBService, dataService: DataService)(implicit ec: ExecutionContext) {
 
   def transactionsByBlock(id: String): Future[List[Transaction]] = dBService.runAsync(getTransactionsByBlockId(id))
 
@@ -18,4 +19,6 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
   def outputById(id: String): Future[Option[Output]] = dBService.runAsync(getOutput(id))
 
   def contractByTransaction(id: String): Future[List[Contract]] = dBService.runAsync(getContract(id))
+
+  def uncommittedTransactions(): Future[List[Transaction]] = dataService.getUncommittedTransactions
 }
