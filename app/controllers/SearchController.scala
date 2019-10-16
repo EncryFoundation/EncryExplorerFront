@@ -2,10 +2,8 @@ package controllers
 
 import models._
 import javax.inject.{Inject, Singleton}
-import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
-import scorex.crypto.encode.Base16
 import settings.Utils
 import scala.concurrent.{ExecutionContext, Future}
 
