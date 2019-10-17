@@ -15,7 +15,7 @@ object DBTransaction {
 
   def apply(tx: Transaction, blockId: String): DBTransaction =
     DBTransaction(
-      Algos.encode(tx.id),
+      tx.encodedId,
       tx.fee,
       blockId,
       tx.inputs.isEmpty,
