@@ -12,9 +12,7 @@ import scala.collection.mutable
 
 class ReceiverActor extends Actor with StrictLogging {
 
-  var transcactions: mutable.Map[String, DBTransaction] = mutable.Map(
-    "qwe" -> DBTransaction("qwe", 3, "blockId", true, System.currentTimeMillis(), None)
-  )
+  var transcactions: mutable.Map[String, DBTransaction] = mutable.Map()
 
   def receive: Receive = {
     case tx: Transaction =>
@@ -43,7 +41,6 @@ object ReceiverActor {
 
 object ModifierMessages {
 
-  case class EmptyMsg()
   case class ModifierTx(tx: Transaction)
   case class ModifierHeader(header: Header)
   case class ModifierPayload(payload: Payload)
