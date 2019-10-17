@@ -21,7 +21,7 @@ class BlockController @Inject()(cc: ControllerComponents,
 
   def getBlock(id: String): Future[Option[Block]] = {
     val headerF: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadF: Future[List[Transaction]] = transactionsDao.transactionsByBlock(id)
+    val payloadF: Future[List[DBTransaction]] = transactionsDao.transactionsByBlock(id)
     for {
       headerOpt <- headerF
       payload <- payloadF

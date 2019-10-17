@@ -3,21 +3,28 @@ package actors
 import actors.ModifierMessages._
 import akka.actor.{Actor, Props}
 import com.typesafe.scalalogging.StrictLogging
+import models.DBTransaction
 import org.encryfoundation.common.modifiers.history.{Header, Payload}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
+import org.encryfoundation.common.utils.Algos
 
 import scala.collection.mutable
 
 class ReceiverActor extends Actor with StrictLogging {
 
-  //logger.debug("ExplorerActor started")
-
-  var transcactions: mutable.Map[String, models.Transaction] = mutable.Map(
-    "qwe" -> models.Transaction("qwe", 3, "dsfdsffdsf", true, System.currentTimeMillis(), Some("Proof"))
+  var transcactions: mutable.Map[String, models.DBTransaction] = mutable.Map(
+    "qwe" -> DBTransaction("qwe", 3, "blockId", true, System.currentTimeMillis(), None)
   )
 
   def receive: Receive = {
-    case ModifierTx(tx: Transaction) => println(s"tx: $tx")
+    case ModifierTx(tx: Transaction) =>
+//      val trans = models.Transaction(
+//        Algos.encode(tx.id),
+//        tx.fee,
+//        "blockId",
+//        tx.
+//      )
+//      transcactions +=
     case ModifierHeader(header: Header) => println(s"header: $header")
     case ModifierPayload(payload: Payload) => println(s"payload: txs ${payload.txs.size}")
 
@@ -35,5 +42,5 @@ object ModifierMessages {
   case class ModifierPayload(payload: Payload)
 
   case class TransactionsQ()
-  case class TransactionsA(txs: List[models.Transaction])
+  case class TransactionsA(txs: List[models.DBTransaction])
 }

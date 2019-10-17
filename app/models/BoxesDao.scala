@@ -16,7 +16,7 @@ class BoxesDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext){
   def getTxsIdByHash(contractHash: String): Future[List[String]] =
     dBService.runAsync(WalletQueries.getTxsIdByHash(contractHash))
 
-  def getLastTxById(Id: String): Future[Transaction] =
+  def getLastTxById(Id: String): Future[DBTransaction] =
     dBService.runAsync(WalletQueries.getLastTxsByHash(Id))
 
 }

@@ -16,7 +16,7 @@ import scala.concurrent.duration._
 class DataService @Inject()(config: Configuration, settings: ExplorerSettings, @Named("receiver") receiver: ActorRef, components: ControllerComponents) {
   implicit val timeout: Timeout = 5 seconds
 
-  def getUncommittedTransactions: Future[List[models.Transaction]] =
+  def getUncommittedTransactions: Future[List[models.DBTransaction]] =
     (receiver ? TransactionsQ()).mapTo[TransactionsA].map(_.txs)
 
 }

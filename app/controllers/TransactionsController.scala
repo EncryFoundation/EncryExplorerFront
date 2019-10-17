@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Contract, FullFilledTransaction, Input, Output, Transaction, TransactionsDao}
+import models.{Contract, FullFilledTransaction, Input, Output, DBTransaction, TransactionsDao}
 import javax.inject.{Inject, Singleton}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
@@ -37,7 +37,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def getUncomTransactions: Action[AnyContent] = Action.async {
     transactionsDao.uncommittedTransactions().map {
       case Nil => NotFound
-      case txs: List[Transaction] => Ok(views.html.uncomtransInfo(txs))
+      case txs: List[DBTransaction] => Ok(views.html.uncomtransInfo(txs))
     }
   }
 

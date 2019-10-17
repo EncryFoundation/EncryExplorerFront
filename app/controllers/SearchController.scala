@@ -16,7 +16,7 @@ class SearchController @Inject()(cc: ControllerComponents,
 
   def getBlock(id: String): Future[Option[Block]] = {
     val headerF: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadF: Future[List[Transaction]] = transactionsDao.transactionsByBlock(id)
+    val payloadF: Future[List[DBTransaction]] = transactionsDao.transactionsByBlock(id)
     for {
       headerOpt <- headerF
       payload   <- payloadF
@@ -48,7 +48,7 @@ class SearchController @Inject()(cc: ControllerComponents,
     val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
     val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(Utils.contractHashByAddress(id))
     val txIdF: Future[List[String]] = boxesDao.getTxsIdByHash(Utils.contractHashByAddress(id))
-    val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
+    val txsF: Future[List[DBTransaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
 
     val result = for {
       blockOpt       <- blockF
