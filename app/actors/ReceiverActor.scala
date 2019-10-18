@@ -1,50 +1,37 @@
 package actors
 
-import actors.ModifierMessages._
-import akka.actor.{Actor, Props}
+import actors.CacheActor.RemoveConfirmedTransactions
+import akka.actor.{Actor, ActorRef, Props}
 import com.typesafe.scalalogging.StrictLogging
+import javax.inject.{Inject, Named}
 import models.DBTransaction
 import org.encryfoundation.common.modifiers.history.{Header, Payload}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
-import org.encryfoundation.common.utils.TaggedTypes.ModifierId
 
-import scala.collection.mutable
-
-class ReceiverActor extends Actor with StrictLogging {
-
-  var transcactions: mutable.Map[String, DBTransaction] = mutable.Map()
+class ReceiverActor @Inject()(@Named("cache") cache: ActorRef) extends Actor with StrictLogging {
 
   def receive: Receive = {
     case tx: Transaction =>
       val trans = DBTransaction(tx, "")
-      transcactions += trans.id -> trans
+      cache ! trans
 
     case header: Header =>
       logger.debug(s"header: ${header.encodedId}")
 
     case payload: Payload =>
       logger.debug(s"payload: ${payload.encodedId} txs ${payload.txs.size}")
-      removeCommitedTrans(payload.txs)
+      cache ! RemoveConfirmedTransactions(payload.txs.map(_.encodedId))
 
-    case TransactionsQ() =>
-      sender ! TransactionsA(transcactions.values.toList)
   }
 
-  def removeCommitedTrans(txs: Seq[Transaction]) {
-    txs.foreach(tx => transcactions.remove(tx.encodedId))
-  }
 }
 
 object ReceiverActor {
-  def props: Props = Props[ReceiverActor]
+  def props(cache: ActorRef): Props = Props(new ReceiverActor(cache))
 }
 
 object ModifierMessages {
-
   case class ModifierTx(tx: Transaction)
   case class ModifierHeader(header: Header)
   case class ModifierPayload(payload: Payload)
-
-  case class TransactionsQ()
-  case class TransactionsA(txs: List[models.DBTransaction])
 }

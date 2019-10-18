@@ -20,5 +20,5 @@ class TransactionsDao @Inject()(dBService: DBService, dataService: DataService)(
 
   def contractByTransaction(id: String): Future[List[Contract]] = dBService.runAsync(getContract(id))
 
-  def uncommittedTransactions(): Future[List[DBTransaction]] = dataService.getUncommittedTransactions
+  def uncommittedTransactions(): Future[Seq[DBTransaction]] = dataService.getUncommittedTransactions
 }

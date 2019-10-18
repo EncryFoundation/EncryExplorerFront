@@ -35,7 +35,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   }
 
   def getUncomTransactions: Action[AnyContent] = Action.async {
-    transactionsDao.uncommittedTransactions().map(txs => Ok(views.html.uncomtransInfo(txs)))
+    transactionsDao.uncommittedTransactions().map(txs => Ok(views.html.uncomtransInfo(txs.toList)))
   }
 
 }

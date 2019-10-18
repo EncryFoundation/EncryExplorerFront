@@ -1,6 +1,6 @@
 package models.database
 
-import actors.ModifierMessages.{TransactionsA, TransactionsQ}
+import actors.CacheActor.{TransactionsA, TransactionsQ}
 import akka.actor.ActorRef
 import akka.util.Timeout
 import javax.inject._
@@ -13,10 +13,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class DataService @Inject()(config: Configuration, settings: ExplorerSettings, @Named("receiver") receiver: ActorRef, components: ControllerComponents) {
+class DataService @Inject()(config: Configuration, settings: ExplorerSettings, @Named("cache") cache: ActorRef, components: ControllerComponents) {
   implicit val timeout: Timeout = 5 seconds
 
-  def getUncommittedTransactions: Future[List[models.DBTransaction]] =
-    (receiver ? TransactionsQ()).mapTo[TransactionsA].map(_.txs)
+  def getUncommittedTransactions: Future[Seq[models.DBTransaction]] =
+    (cache ? TransactionsQ()).mapTo[TransactionsA].map(_.txs)
 
 }
