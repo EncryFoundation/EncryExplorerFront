@@ -30,7 +30,7 @@ class SearchController @Inject()(cc: ControllerComponents,
     transactionsDao.transactionById(id).flatMap {
       case Some(tx) =>
         val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
-        val inputsF:  Future[List[Input]]  = transactionsDao.inputsByTransaction(tx.id)
+        val inputsF:  Future[List[DBInput]]  = transactionsDao.inputsByTransaction(tx.id)
         val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
         for {
           outputs  <- outputsF

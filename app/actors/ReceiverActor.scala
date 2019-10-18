@@ -20,7 +20,7 @@ class ReceiverActor @Inject()(@Named("cache") cache: ActorRef) extends Actor wit
 
     case payload: Payload =>
       logger.debug(s"payload: ${payload.encodedId} txs ${payload.txs.size}")
-      cache ! RemoveConfirmedTransactions(payload.txs.map(_.encodedId))
+      cache ! RemoveConfirmedTransactions(payload.txs.map(_.encodedId).toList)
 
   }
 

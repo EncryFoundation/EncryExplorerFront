@@ -1,15 +1,15 @@
 package models.database
 
 import doobie.implicits._
-import models.{Contract, Input, Output, DBTransaction}
+import models.{Contract, DBInput, Output, DBTransaction}
 
 object TransactionsQueries {
 
   def getTransactionsByBlockId(blockId: String): doobie.ConnectionIO[List[DBTransaction]] =
     sql"SELECT * FROM transactions WHERE blockId = $blockId".query[DBTransaction].to[List]
 
-  def getTransactionInputs(transactionId: String): doobie.ConnectionIO[List[Input]] =
-    sql"SELECT * FROM inputs WHERE txId = $transactionId".query[Input].to[List]
+  def getTransactionInputs(transactionId: String): doobie.ConnectionIO[List[DBInput]] =
+    sql"SELECT * FROM inputs WHERE txId = $transactionId".query[DBInput].to[List]
 
   def getTransactionOutputs(transactionId: String): doobie.ConnectionIO[List[Output]] =
     sql"SELECT * FROM outputs WHERE txId = $transactionId".query[Output].to[List]

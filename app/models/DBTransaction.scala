@@ -32,5 +32,5 @@ object DBTransaction {
     )
 }
 
-case class FullFilledTransaction(transaction: DBTransaction, inputs: List[Input], output: List[Output], contract: List[Contract])
+case class FullFilledTransaction(transaction: DBTransaction, inputs: List[DBInput], output: List[Output], contract: List[Contract])
 
