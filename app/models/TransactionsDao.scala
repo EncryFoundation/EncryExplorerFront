@@ -21,6 +21,10 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService
     }
   }
 
+  def fullTransactionById(id: String): Future[Option[FullFilledTransaction]] = {
+    cacheService.getFullTransactionById(id)
+  }
+
   def outputById(id: String): Future[Option[Output]] = dbService.runAsync(getOutput(id))
 
   def contractByTransaction(id: String): Future[List[Contract]] = dbService.runAsync(getContract(id))

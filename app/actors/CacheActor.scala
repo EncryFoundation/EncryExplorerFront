@@ -8,7 +8,7 @@ import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
 
 import scala.collection.mutable
 
-class CacheActor extends Actor with StrictLogging {
+class CacheActor extends Actor {
 
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map()
 
@@ -42,5 +42,5 @@ object CacheActor {
 
   case class RemoveConfirmedTransactions(txIds: List[String])
 
-  def props: Props = Props[ReceiverActor]
+  def props: Props = Props(new CacheActor)
 }
