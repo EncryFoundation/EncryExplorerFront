@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class CacheService @Inject()(config: Configuration, settings: ExplorerSettings, @Named("cache") cache: ActorRef) {
+class CacheService @Inject()(@Named("cache") cache: ActorRef) {
   implicit val timeout: Timeout = 5 seconds
 
   def getUnconfirmedTransactions: Future[List[DBTransaction]] =

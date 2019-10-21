@@ -1,16 +1,23 @@
 package actors
 
-import actors.CacheActor.{RemoveConfirmedTransactions, TransactionByIdA, TransactionByIdQ, TransactionsA, TransactionsQ}
-import akka.actor.{Actor, Props}
-import com.typesafe.scalalogging.StrictLogging
-import models.{Contract, DBInput, DBTransaction, FullFilledTransaction, Output}
+import actors.CacheActor._
+import akka.actor.{Actor, Props, Timers}
+import javax.inject.Inject
+import models._
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
+import settings.ExplorerSettings
 
 import scala.collection.mutable
+import scala.concurrent.duration._
 
-class CacheActor extends Actor {
+class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers {
 
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map()
+
+  object Timer
+  object Tick
+
+  timers.startPeriodicTimer(Timer, Tick, 20 seconds)
 
   def receive: Receive = {
     case tx: Transaction =>
@@ -29,6 +36,14 @@ class CacheActor extends Actor {
 
     case RemoveConfirmedTransactions(txIds) =>
       txIds.foreach(id => unconfTranscactions.remove(id))
+
+    case Tick =>
+      val timestamp = System.currentTimeMillis()
+      val expiredTxIds = unconfTranscactions.values
+        .filter(tx => timestamp - tx.transaction.timestamp > settings.cache.unconfirmedTransactionExpiredInterval.toMillis)
+        .map(_.transaction.id)
+      expiredTxIds.foreach(unconfTranscactions.remove(_))
+
   }
 
 }
@@ -42,5 +57,5 @@ object CacheActor {
 
   case class RemoveConfirmedTransactions(txIds: List[String])
 
-  def props: Props = Props(new CacheActor)
+  //def props(unconfirmedTransactionExpiredInterval: FiniteDuration): Props = Props(new CacheActor(unconfirmedTransactionExpiredInterval))
 }
