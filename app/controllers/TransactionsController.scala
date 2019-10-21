@@ -12,32 +12,15 @@ class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
-    transactionsDao.fullTransactionById(id)
-
-//    transactionsDao.transactionById(id).flatMap {
-//      case Some(tx) =>
-//        val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
-//        val inputsF: Future[List[DBInput]] = transactionsDao.inputsByTransaction(tx.id)
-//        val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
-//        for {
-//          outputs <- outputsF
-//          inputs <- inputsF
-//          contract <- contractF
-//        } yield Some(FullFilledTransaction(tx, inputs, outputs, contract))
-//
-//      case _ => Future(Option.empty[FullFilledTransaction])
-//    }
-
   def getTransaction(txId: String): Action[AnyContent] = Action.async {
-    getFullTransaction(txId).map {
+    transactionsDao.fullTransactionById(txId).map {
       case Some(tx) => Ok(views.html.transactionInfo(tx))
       case None => NotFound
     }
   }
 
   def getUncomTransactions: Action[AnyContent] = Action.async {
-    transactionsDao.uncommittedTransactions().map(txs => Ok(views.html.uncomtransInfo(txs)))
+    transactionsDao.unconfirmedTransactions().map(txs => Ok(views.html.uncomtransInfo(txs)))
   }
 
 }

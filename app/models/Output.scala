@@ -1,14 +1,10 @@
 package models
 
-import io.circe.generic.auto._
-import io.circe.Encoder
-import io.circe.syntax._
 import models.Output.Proposition
 import org.encryfoundation.common.modifiers.mempool.transaction.EncryAddress.Address
-import org.encryfoundation.common.modifiers.mempool.transaction.{EncryAddress, Transaction}
+import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
 import org.encryfoundation.common.modifiers.state.box.AssetBox
 import org.encryfoundation.common.utils.Algos
-import org.encryfoundation.prismlang.core.Constants
 import settings.Utils
 
 case class Output(idx: Int,

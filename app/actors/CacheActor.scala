@@ -1,6 +1,6 @@
 package actors
 
-import actors.CacheActor.{RemoveConfirmedTransactions, TransactionByIdA, TransactionByIdQ, UnconfTransactionsA, UnconfTransactionsQ}
+import actors.CacheActor.{RemoveConfirmedTransactions, TransactionByIdA, TransactionByIdQ, TransactionsA, TransactionsQ}
 import akka.actor.{Actor, Props}
 import com.typesafe.scalalogging.StrictLogging
 import models.{Contract, DBInput, DBTransaction, FullFilledTransaction, Output}
@@ -21,8 +21,8 @@ class CacheActor extends Actor {
       val unconfTranscaction = FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
       unconfTranscactions += tx.encodedId -> unconfTranscaction
 
-    case UnconfTransactionsQ() =>
-      sender ! UnconfTransactionsA(unconfTranscactions.values.toList)
+    case TransactionsQ() =>
+      sender ! TransactionsA(unconfTranscactions.values.toList)
 
     case TransactionByIdQ(id) =>
       sender ! TransactionByIdA(unconfTranscactions.get(id))
@@ -34,8 +34,8 @@ class CacheActor extends Actor {
 }
 
 object CacheActor {
-  case class UnconfTransactionsQ()
-  case class UnconfTransactionsA(txs: List[FullFilledTransaction])
+  case class TransactionsQ()
+  case class TransactionsA(txs: List[FullFilledTransaction])
 
   case class TransactionByIdQ(id: String)
   case class TransactionByIdA(tx: Option[FullFilledTransaction])
