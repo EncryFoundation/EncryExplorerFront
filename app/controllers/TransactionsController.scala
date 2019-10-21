@@ -20,7 +20,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   }
 
   def getUncomTransactions: Action[AnyContent] = Action.async {
-    transactionsDao.unconfirmedTransactions().map(txs => Ok(views.html.uncomtransInfo(txs)))
+    transactionsDao.unconfirmedTransactions().map(txs => Ok(views.html.unconftransInfo(txs)))
   }
 
 }

@@ -12,12 +12,13 @@ import scala.concurrent.duration._
 
 class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers {
 
+  //TODO: store in sorted list, iterate until cond
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map()
 
   object Timer
   object Tick
 
-  timers.startPeriodicTimer(Timer, Tick, 20 seconds)
+  timers.startPeriodicTimer(Timer, Tick, 10 seconds)
 
   def receive: Receive = {
     case tx: Transaction =>
@@ -29,7 +30,7 @@ class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers
       unconfTranscactions += tx.encodedId -> unconfTranscaction
 
     case TransactionsQ() =>
-      sender ! TransactionsA(unconfTranscactions.values.toList)
+      sender ! TransactionsA(unconfTranscactions.values.toList.sortBy(-_.transaction.timestamp))
 
     case TransactionByIdQ(id) =>
       sender ! TransactionByIdA(unconfTranscactions.get(id))
@@ -56,6 +57,4 @@ object CacheActor {
   case class TransactionByIdA(tx: Option[FullFilledTransaction])
 
   case class RemoveConfirmedTransactions(txIds: List[String])
-
-  //def props(unconfirmedTransactionExpiredInterval: FiniteDuration): Props = Props(new CacheActor(unconfirmedTransactionExpiredInterval))
 }
