@@ -1,13 +1,13 @@
 package models.dao
 
 import javax.inject.Inject
+import models.{Contract, DBInput, DBOutput, DBTransaction, FullFilledTransaction}
 import models.database.TransactionsQueries._
-import models.database.{CacheService, DBService}
-import models._
+import models.service.{DBService, TransService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService)(implicit ec: ExecutionContext) {
+class TransactionsDao @Inject()(dbService: DBService, cacheService: TransService)(implicit ec: ExecutionContext) {
 
   def transactionsByBlock(id: String): Future[List[DBTransaction]] = dbService.runAsync(getTransactionsByBlockId(id))
 

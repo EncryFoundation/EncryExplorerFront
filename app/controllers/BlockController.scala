@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models._
+import models.{Block, DBTransaction, Header}
 import models.dao.{HistoryDao, TransactionsDao}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
@@ -28,7 +28,7 @@ class BlockController @Inject()(cc: ControllerComponents,
       headerOpt <- headerF
       payload <- payloadF
     } yield headerOpt match {
-      case Some(header) => Some(Block(header, payload))
+      case Some(header) => Some(models.Block(header, payload))
       case _ => None
     }
   }

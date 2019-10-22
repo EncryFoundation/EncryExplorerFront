@@ -1,20 +1,17 @@
-package models.database
+package models.service
 
-import actors.CacheActor.{TransactionByIdA, TransactionByIdQ, TransactionsA, TransactionsQ}
+import actors.TransStorage.{TransactionByIdA, TransactionByIdQ, TransactionsA, TransactionsQ}
 import akka.actor.ActorRef
+import akka.pattern.ask
 import akka.util.Timeout
 import javax.inject._
-import play.api.Configuration
-import play.api.mvc._
-import settings.ExplorerSettings
-import akka.pattern.ask
 import models.{DBTransaction, FullFilledTransaction}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class CacheService @Inject()(@Named("cache") cache: ActorRef) {
+class TransService @Inject()(@Named("transStorage") cache: ActorRef) {
   implicit val timeout: Timeout = 5 seconds
 
   def getUnconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] =

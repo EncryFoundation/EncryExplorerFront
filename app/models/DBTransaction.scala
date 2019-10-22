@@ -2,7 +2,7 @@ package models
 
 import org.encryfoundation.common.modifiers.mempool.transaction.{Proof, Transaction}
 import org.encryfoundation.common.utils.Algos
-import org.encryfoundation.prismlang.core.wrapped.BoxedValue.{BoolValue, ByteCollectionValue, ByteValue, IntValue, MultiSignatureValue, Signature25519Value, StringValue}
+import org.encryfoundation.prismlang.core.wrapped.BoxedValue._
 
 case class DBTransaction(id: String,
                          fee: Long,

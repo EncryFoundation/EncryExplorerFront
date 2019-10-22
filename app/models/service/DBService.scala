@@ -1,13 +1,14 @@
-package models.database
+package models.service
 
 import cats.effect.IO
 import doobie.free.connection.ConnectionIO
 import doobie.hikari.HikariTransactor.newHikariTransactor
+import doobie.hikari.implicits._
 import doobie.implicits._
 import javax.inject.Inject
 import play.api.Configuration
-import doobie.hikari.implicits._
 import settings.ExplorerSettings
+
 import scala.concurrent.Future
 
 class DBService @Inject()(config: Configuration, settings: ExplorerSettings) {

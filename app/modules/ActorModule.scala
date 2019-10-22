@@ -1,6 +1,6 @@
 package modules
 
-import actors.ReceiverActor
+import actors.Receiver
 import play.api.mvc._
 import akka.actor._
 import javax.inject._

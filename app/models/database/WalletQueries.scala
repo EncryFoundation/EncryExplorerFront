@@ -4,7 +4,6 @@ import doobie._
 import doobie.implicits._
 import models.{DBTransaction, Wallet}
 
-
 object WalletQueries {
 
   def getWallet(address: String): ConnectionIO[List[Wallet]] =

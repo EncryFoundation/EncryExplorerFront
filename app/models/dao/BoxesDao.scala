@@ -1,8 +1,9 @@
 package models.dao
 
 import javax.inject.Inject
-import models.{DBTransaction, DBOutput, Wallet}
-import models.database.{BoxesQueries, DBService, WalletQueries}
+import models.{DBOutput, DBTransaction, Wallet}
+import models.database.{BoxesQueries, WalletQueries}
+import models.service.DBService
 
 import scala.concurrent.{ExecutionContext, Future}
 

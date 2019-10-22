@@ -1,16 +1,16 @@
 package actors
 
-import actors.CacheActor._
+import actors.TransStorage._
 import akka.actor.{Actor, Props, Timers}
 import javax.inject.Inject
-import models._
+import models.{FullFilledTransaction, _}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
 import settings.ExplorerSettings
 
 import scala.collection.mutable
 import scala.concurrent.duration._
 
-class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers {
+class TransStorage @Inject()(settings: ExplorerSettings) extends Actor with Timers {
 
   //TODO: store in sorted list, iterate until cond
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction]()
@@ -49,7 +49,7 @@ class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers
 
 }
 
-object CacheActor {
+object TransStorage {
   case class TransactionsQ(from: Int, to: Int)
   case class TransactionsA(txs: List[FullFilledTransaction])
 
