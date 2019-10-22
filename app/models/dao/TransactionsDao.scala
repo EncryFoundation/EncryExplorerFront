@@ -13,7 +13,7 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService
 
   def inputsByTransaction(id: String): Future[List[DBInput]] = dbService.runAsync(getTransactionInputs(id))
 
-  def outputsByTransaction(id: String): Future[List[Output]] = dbService.runAsync(getTransactionOutputs(id))
+  def outputsByTransaction(id: String): Future[List[DBOutput]] = dbService.runAsync(getTransactionOutputs(id))
 
   def transactionById(id: String): Future[Option[DBTransaction]] = {
     cacheService.getTransactionById(id).flatMap { txOpt =>
@@ -25,7 +25,7 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService
   private def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
     transactionById(id).flatMap {
       case Some(tx) =>
-        val outputsF: Future[List[Output]] = outputsByTransaction(tx.id)
+        val outputsF: Future[List[DBOutput]] = outputsByTransaction(tx.id)
         val inputsF: Future[List[DBInput]] = inputsByTransaction(tx.id)
         val contractF: Future[List[Contract]] = contractByTransaction(tx.id)
         for {
@@ -44,7 +44,7 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService
     }
   }
 
-  def outputById(id: String): Future[Option[Output]] = dbService.runAsync(getOutput(id))
+  def outputById(id: String): Future[Option[DBOutput]] = dbService.runAsync(getOutput(id))
 
   def contractByTransaction(id: String): Future[List[Contract]] = dbService.runAsync(getContract(id))
 

@@ -20,7 +20,7 @@ class WalletController @Inject()(cc: ControllerComponents,
   def info(contractHash: String, from: Int, to: Int): Action[AnyContent] = Action.async {
     boxesDao.getBoxesByContractHash(contractHash, from: Int, to: Int).map {
       case Nil => NotFound
-      case list: List[Output] => Ok(list.asJson)
+      case list: List[DBOutput] => Ok(list.asJson)
 
     }
   }

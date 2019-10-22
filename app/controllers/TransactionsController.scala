@@ -1,12 +1,11 @@
 package controllers
 
-import models.{Contract, DBInput, DBTransaction, FullFilledTransaction, Header, Output}
 import javax.inject.{Inject, Singleton}
 import models.dao.TransactionsDao
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class TransactionsController @Inject()(cc: ControllerComponents,

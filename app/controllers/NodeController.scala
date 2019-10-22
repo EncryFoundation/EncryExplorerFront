@@ -15,7 +15,7 @@ class NodeController @Inject()(cc: ControllerComponents,
   def nodes(): Action[AnyContent] = Action.async {
     historyDao.getAllNodes.map {
       case Nil => NotFound
-      case node: List[Node] => Ok(views.html.nodeInfo(node))
+      case node: List[Node] => Ok(views.html.nodes(node))
     }
   }
 }

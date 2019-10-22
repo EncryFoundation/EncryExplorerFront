@@ -1,6 +1,6 @@
 package models
 
-import models.Output.Proposition
+import models.DBOutput.Proposition
 import org.encryfoundation.common.modifiers.mempool.directive.TransferDirective
 import org.encryfoundation.common.modifiers.mempool.transaction.EncryAddress.Address
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
@@ -8,19 +8,19 @@ import org.encryfoundation.common.modifiers.state.box.{AssetBox, DataBox}
 import org.encryfoundation.common.utils.Algos
 import settings.Utils
 
-case class Output(idx: Int,
-                  id: String,
-                  `type`: Long,
-                  txId: String,
-                  value: Long,
-                  nonce: Long,
-                  tokenId: String,
-                  proposition: Proposition,
-                  data: String,
-                  isActive: Boolean,
-                  minerAddress: String)
+case class DBOutput(idx: Int,
+                    id: String,
+                    `type`: Long,
+                    txId: String,
+                    value: Long,
+                    nonce: Long,
+                    tokenId: String,
+                    proposition: Proposition,
+                    data: String,
+                    isActive: Boolean,
+                    minerAddress: String)
 
-object Output {
+object DBOutput {
 
   case class Proposition(contractHash: String)
 
@@ -34,9 +34,9 @@ object Output {
             proposition: String,
             data: String,
             isActive: Boolean,
-            minerAddress: String): Output = new Output(idx, id, `type`, txId, value, nonce, tokenId, Proposition(proposition), data, isActive, minerAddress)
+            minerAddress: String): DBOutput = new DBOutput(idx, id, `type`, txId, value, nonce, tokenId, Proposition(proposition), data, isActive, minerAddress)
 
-  def apply(tx: Transaction): List[Output] = {
+  def apply(tx: Transaction): List[DBOutput] = {
     tx.directives.toList.collect {
       case TransferDirective(address, amount, tokenIdOpt) => address
     }
@@ -54,7 +54,7 @@ object Output {
         case _ => None
       }
 
-      new Output(idx, Algos.encode(box.id), box.typeId, tx.encodedId, amount, box.nonce, tokenId,
+      new DBOutput(idx, Algos.encode(box.id), box.typeId, tx.encodedId, amount, box.nonce, tokenId,
         Proposition(Algos.encode(box.proposition.contractHash)), data, true, address.getOrElse(""))
     }
   }
