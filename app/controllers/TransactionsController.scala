@@ -13,6 +13,8 @@ class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
+  val TRANSACTION_PER_PAGE = 50
+
   def getTransaction(txId: String): Action[AnyContent] = Action.async {
     transactionsDao.fullTransactionById(txId).map {
       case Some(tx) => Ok(views.html.transactionInfo(tx))
@@ -20,29 +22,12 @@ class TransactionsController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def getUncomTransactions: Action[AnyContent] = Action.async {
-    transactionsDao.unconfirmedTransactions().map(txs => Ok(views.html.transactions(txs)))
+  def getUnconfirmedTransactions(page: Int): Action[AnyContent] = Action.async {
+    val from = page * TRANSACTION_PER_PAGE
+    val to = (page + 1) * TRANSACTION_PER_PAGE
+    transactionsDao.unconfirmedTransactions(from, to).map { txs =>
+      Ok(views.html.transactions(txs, page))
+    }
   }
-
-  def indByTxId(txId: String): Int = {
-    0
-  }
-
-  def transactionsPage(txId: String): Action[AnyContent] = Action.async {
-//    val range: Future[List[Header]] = historyDao.listHeadersByHeightRange(to)
-//    val height: Future[Option[Int]] = historyDao.lastHeights()
-//
-//    val result: Future[(List[Header], Option[Int])] = for {
-//      rangeOpt  <- range
-//      heightOpt <- height
-//    } yield (rangeOpt, heightOpt)
-//
-//    result.map {
-//      case (rangeOpt, heightOpt) => Ok(views.html.index(rangeOpt, heightOpt.getOrElse(0)))
-//      case _ => NotFound
-//    }
-    Future(Ok(views.html.transactions(List[DBTransaction]())))
-  }
-
 
 }

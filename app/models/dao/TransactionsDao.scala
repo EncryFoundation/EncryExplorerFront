@@ -48,5 +48,5 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: CacheService
 
   def contractByTransaction(id: String): Future[List[Contract]] = dbService.runAsync(getContract(id))
 
-  def unconfirmedTransactions(): Future[List[DBTransaction]] = cacheService.getUnconfirmedTransactions
+  def unconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] = cacheService.getUnconfirmedTransactions(from, to)
 }

@@ -13,7 +13,11 @@ import scala.concurrent.duration._
 class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers {
 
   //TODO: store in sorted list, iterate until cond
-  var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map()
+  var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction](
+//    (0 until 120).foldLeft(List[FullFilledTransaction]()) { (acc, n) =>
+//      acc :+ FullFilledTransaction(DBTransaction(s"id$n", 3, "qweqwe", false, System.currentTimeMillis(), None), List(), List(), List())
+//    }.map(t => t.transaction.id -> t): _*
+  )
 
   object Timer
   object Tick
@@ -29,8 +33,14 @@ class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers
       val unconfTranscaction = FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
       unconfTranscactions += tx.encodedId -> unconfTranscaction
 
-    case TransactionsQ() =>
-      sender ! TransactionsA(unconfTranscactions.values.toList.sortBy(-_.transaction.timestamp))
+    case TransactionsQ(from, to) =>
+      val fromBound = if (from >= 0) from else 0
+      val toBound = if (to <= unconfTranscactions.size) to else unconfTranscactions.size
+
+      val txs = unconfTranscactions.values.toList
+        .sortBy(-_.transaction.timestamp)
+        .slice(if (fromBound <= toBound) fromBound else toBound, toBound)
+      sender ! TransactionsA(txs)
 
     case TransactionByIdQ(id) =>
       sender ! TransactionByIdA(unconfTranscactions.get(id))
@@ -44,13 +54,12 @@ class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers
         .filter(tx => timestamp - tx.transaction.timestamp > settings.cache.unconfirmedTransactionExpiredInterval.toMillis)
         .map(_.transaction.id)
       expiredTxIds.foreach(unconfTranscactions.remove(_))
-
   }
 
 }
 
 object CacheActor {
-  case class TransactionsQ()
+  case class TransactionsQ(from: Int, to: Int)
   case class TransactionsA(txs: List[FullFilledTransaction])
 
   case class TransactionByIdQ(id: String)

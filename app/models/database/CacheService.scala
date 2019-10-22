@@ -17,8 +17,8 @@ import scala.concurrent.duration._
 class CacheService @Inject()(@Named("cache") cache: ActorRef) {
   implicit val timeout: Timeout = 5 seconds
 
-  def getUnconfirmedTransactions: Future[List[DBTransaction]] =
-    (cache ? TransactionsQ()).mapTo[TransactionsA].map(_.txs.map(_.transaction))
+  def getUnconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] =
+    (cache ? TransactionsQ(from, to)).mapTo[TransactionsA].map(_.txs.map(_.transaction))
 
 
   def transById(id: String): Future[Option[FullFilledTransaction]] =
