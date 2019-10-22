@@ -39,7 +39,7 @@ object FullFilledTransaction {
   def apply(tx: Transaction): FullFilledTransaction = {
     val dbTransaction = DBTransaction(tx, "")
     val dbInputs = tx.inputs.map(input => DBInput(input, tx.encodedId)).toList
-    val dbOutputs = Output.getOutputs(tx, "minerAddress")
+    val dbOutputs = Output(tx)
     val contracts = dbInputs.map(input => Contract(input.contractHash)).distinct
     FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
   }

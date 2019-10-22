@@ -52,7 +52,6 @@
                                 <th scope="col">Transaction id</th>
                                 <th scope="col">timestamp</th>
                                 <th scope="col">fee</th>
-                                <th scope="col">is CoinBase</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -72,13 +71,6 @@
                                 <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @tx.fee
-                                                </span>
-                                </td>
-                                <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    @{
-                                                        if(tx.isCoinbase) "Yes" else None
-                                                    }
                                                 </span>
                                 </td>
                             </tr>

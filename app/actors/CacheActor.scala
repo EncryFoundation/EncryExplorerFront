@@ -13,11 +13,7 @@ import scala.concurrent.duration._
 class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers {
 
   //TODO: store in sorted list, iterate until cond
-  var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction](
-//    (0 until 120).foldLeft(List[FullFilledTransaction]()) { (acc, n) =>
-//      acc :+ FullFilledTransaction(DBTransaction(s"id$n", 3, "qweqwe", false, System.currentTimeMillis(), None), List(), List(), List())
-//    }.map(t => t.transaction.id -> t): _*
-  )
+  var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction]()
 
   object Timer
   object Tick
