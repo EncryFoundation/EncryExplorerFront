@@ -4,9 +4,11 @@ import com.typesafe.scalalogging.StrictLogging
 import javax.inject.Inject
 import models._
 import play.api.libs.circe.Circe
+
 import scala.concurrent._
 import io.circe.generic.auto._
 import io.circe.syntax._
+import models.dao.{BoxesDao, TransactionsDao}
 import play.api.mvc._
 import settings.Utils
 

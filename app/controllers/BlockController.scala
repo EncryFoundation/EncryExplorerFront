@@ -2,8 +2,10 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 import models._
+import models.dao.{HistoryDao, TransactionsDao}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

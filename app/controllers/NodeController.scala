@@ -1,8 +1,10 @@
 package controllers
 
 import javax.inject.{Inject, _}
-import models.{HistoryDao, Node}
+import models.Node
+import models.dao.HistoryDao
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext
 
 @Singleton

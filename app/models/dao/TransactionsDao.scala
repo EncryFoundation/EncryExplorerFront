@@ -1,8 +1,9 @@
-package models
+package models.dao
 
 import javax.inject.Inject
 import models.database.TransactionsQueries._
 import models.database.{CacheService, DBService}
+import models._
 
 import scala.concurrent.{ExecutionContext, Future}
 

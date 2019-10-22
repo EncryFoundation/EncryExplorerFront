@@ -2,8 +2,10 @@ package controllers
 
 import com.typesafe.scalalogging.StrictLogging
 import javax.inject.{Inject, _}
-import models.{Header, HistoryDao}
+import models.Header
+import models.dao.HistoryDao
 import play.api.mvc.{Action, _}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

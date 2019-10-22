@@ -1,4 +1,4 @@
-package models
+package models.dao
 
 import javax.inject.Inject
 import models.database.{BoxesQueries, DBService, WalletQueries}
