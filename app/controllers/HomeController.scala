@@ -1,6 +1,5 @@
 package controllers
 
-import com.typesafe.scalalogging.StrictLogging
 import javax.inject.{Inject, _}
 import models.Header
 import models.dao.HistoryDao
@@ -11,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
                                historyDao: HistoryDao)
-                              (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers with StrictLogging {
+                              (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers {
 
   def index(): Action[AnyContent] = Action.async {
     val headers: Future[List[Header]] = historyDao.lastHeaders()

@@ -2,12 +2,12 @@ package actors
 
 import actors.TransStorage.RemoveConfirmedTransactions
 import akka.actor.{Actor, ActorRef, Props}
-import com.typesafe.scalalogging.StrictLogging
 import javax.inject.{Inject, Named}
-import org.encryfoundation.common.modifiers.history.{Header, Payload}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
+import play.api.Logger
 
-class Receiver @Inject()(@Named("transStorage") cache: ActorRef) extends Actor with StrictLogging {
+class Receiver @Inject()(@Named("transStorage") cache: ActorRef) extends Actor {
+  Logger.info("Receiver")
 
   def receive: Receive = {
     case transaction: Transaction =>

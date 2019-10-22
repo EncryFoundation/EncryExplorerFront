@@ -1,6 +1,5 @@
 package controllers
 
-import com.typesafe.scalalogging.StrictLogging
 import javax.inject.Inject
 import models._
 import play.api.libs.circe.Circe
@@ -15,7 +14,7 @@ import settings.Utils
 class WalletController @Inject()(cc: ControllerComponents,
                                  boxesDao: BoxesDao,
                                  transactionsDao: TransactionsDao)
-                                (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers with Circe with StrictLogging {
+                                (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers with Circe {
 
   def info(contractHash: String, from: Int, to: Int): Action[AnyContent] = Action.async {
     boxesDao.getBoxesByContractHash(contractHash, from: Int, to: Int).map {

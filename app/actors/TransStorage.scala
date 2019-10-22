@@ -5,12 +5,15 @@ import akka.actor.{Actor, Props, Timers}
 import javax.inject.Inject
 import models.{FullFilledTransaction, _}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
+import play.api.Logger
 import settings.ExplorerSettings
 
 import scala.collection.mutable
 import scala.concurrent.duration._
 
 class TransStorage @Inject()(settings: ExplorerSettings) extends Actor with Timers {
+
+  Logger.info("TransStorage")
 
   //TODO: store in sorted list, iterate until cond
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction]()
