@@ -26,12 +26,7 @@ class CacheActor @Inject()(settings: ExplorerSettings) extends Actor with Timers
 
   def receive: Receive = {
     case tx: Transaction =>
-      val dbTransaction = DBTransaction(tx, "")
-      val dbInputs = tx.inputs.map(input => DBInput(input, tx.encodedId)).toList
-      val dbOutputs = Output.getOutputs(tx, "minerAddress")
-      val contracts = dbInputs.map(input => Contract(input.contractHash, input.contract)).distinct
-      val unconfTranscaction = FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
-      unconfTranscactions += tx.encodedId -> unconfTranscaction
+      unconfTranscactions += tx.encodedId -> FullFilledTransaction(tx)
 
     case TransactionsQ(from, to) =>
       val fromBound = if (from >= 0) from else 0

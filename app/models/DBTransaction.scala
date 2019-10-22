@@ -34,3 +34,14 @@ object DBTransaction {
 
 case class FullFilledTransaction(transaction: DBTransaction, inputs: List[DBInput], output: List[Output], contract: List[Contract])
 
+object FullFilledTransaction {
+
+  def apply(tx: Transaction): FullFilledTransaction = {
+    val dbTransaction = DBTransaction(tx, "")
+    val dbInputs = tx.inputs.map(input => DBInput(input, tx.encodedId)).toList
+    val dbOutputs = Output.getOutputs(tx, "minerAddress")
+    val contracts = dbInputs.map(input => Contract(input.contractHash)).distinct
+    FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
+  }
+}
+

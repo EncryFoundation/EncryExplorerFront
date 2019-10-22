@@ -13,7 +13,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  val TRANSACTION_PER_PAGE = 50
+  val TRANSACTION_PER_PAGE = 10
 
   def getTransaction(txId: String): Action[AnyContent] = Action.async {
     transactionsDao.fullTransactionById(txId).map {

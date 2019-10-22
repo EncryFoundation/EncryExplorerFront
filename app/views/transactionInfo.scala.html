@@ -272,7 +272,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">Input ID</th>
-                                            <th scope="col">Input contract</th>
+                                            <th scope="col">Input contract hash</th>
                                             <th scope="col">Input proofs</th>
                                         </tr>
                                     </thead>
@@ -286,7 +286,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @tx.contract.map(_.contract)
+                                                @tx.contract.map(_.hash).mkString(",")
                                                 </span>
                                             </td>
                                             <td>
@@ -344,7 +344,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @output.proposition
+                                                @output.proposition.contractHash
                                                 </span>
                                             </td>
                                             <td>

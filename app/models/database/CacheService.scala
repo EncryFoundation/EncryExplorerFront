@@ -20,7 +20,6 @@ class CacheService @Inject()(@Named("cache") cache: ActorRef) {
   def getUnconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] =
     (cache ? TransactionsQ(from, to)).mapTo[TransactionsA].map(_.txs.map(_.transaction))
 
-
   def transById(id: String): Future[Option[FullFilledTransaction]] =
     (cache ? TransactionByIdQ(id)).mapTo[TransactionByIdA].map(_.tx)
 
