@@ -11,14 +11,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class TransService @Inject()(@Named("transStorage") cache: ActorRef) {
+class TransService @Inject()(@Named("transStorage") transStorage: ActorRef) {
   implicit val timeout: Timeout = 5 seconds
 
   def getUnconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] =
-    (cache ? TransactionsQ(from, to)).mapTo[TransactionsA].map(_.txs.map(_.transaction))
+    (transStorage ? TransactionsQ(from, to)).mapTo[TransactionsA].map(_.txs.map(_.transaction))
 
   def transById(id: String): Future[Option[FullFilledTransaction]] =
-    (cache ? TransactionByIdQ(id)).mapTo[TransactionByIdA].map(_.tx)
+    (transStorage ? TransactionByIdQ(id)).mapTo[TransactionByIdA].map(_.tx)
 
   def getTransactionById(id: String): Future[Option[DBTransaction]] =
     transById(id).map(_.map(_.transaction))

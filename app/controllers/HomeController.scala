@@ -4,7 +4,6 @@ import javax.inject.{Inject, _}
 import models.Header
 import models.dao.HistoryDao
 import play.api.mvc.{Action, _}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

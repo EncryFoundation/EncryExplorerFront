@@ -6,7 +6,6 @@ import models.{Block, Contract, DBInput, DBOutput, DBTransaction, FullFilledTran
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
 import settings.Utils
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -23,7 +22,7 @@ class SearchController @Inject()(cc: ControllerComponents,
       headerOpt <- headerF
       payload   <- payloadF
     } yield headerOpt match {
-      case Some(header) => Some(models.Block(header, payload))
+      case Some(header) => Some(Block(header, payload))
       case _ => None
     }
   }
@@ -38,7 +37,7 @@ class SearchController @Inject()(cc: ControllerComponents,
           outputs  <- outputsF
           inputs   <- inputsF
           contract <- contractF
-        } yield  Some(models.FullFilledTransaction(tx, inputs, outputs, contract))
+        } yield  Some(FullFilledTransaction(tx, inputs, outputs, contract))
 
       case _ => Future(Option.empty[FullFilledTransaction])
     }

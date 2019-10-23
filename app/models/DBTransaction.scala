@@ -44,4 +44,3 @@ object FullFilledTransaction {
     FullFilledTransaction(dbTransaction, dbInputs, dbOutputs, contracts)
   }
 }
-

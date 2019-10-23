@@ -7,7 +7,7 @@ import models.service.{DBService, TransService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransactionsDao @Inject()(dbService: DBService, cacheService: TransService)(implicit ec: ExecutionContext) {
+class TransactionsDao @Inject()(dbService: DBService, transService: TransService)(implicit ec: ExecutionContext) {
 
   def transactionsByBlock(id: String): Future[List[DBTransaction]] = dbService.runAsync(getTransactionsByBlockId(id))
 
@@ -16,7 +16,7 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: TransService
   def outputsByTransaction(id: String): Future[List[DBOutput]] = dbService.runAsync(getTransactionOutputs(id))
 
   def transactionById(id: String): Future[Option[DBTransaction]] = {
-    cacheService.getTransactionById(id).flatMap { txOpt =>
+    transService.getTransactionById(id).flatMap { txOpt =>
       if(txOpt.isEmpty) dbService.runAsync(getTransactionById(id))
       else Future(txOpt)
     }
@@ -38,7 +38,7 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: TransService
     }
 
   def fullTransactionById(id: String): Future[Option[FullFilledTransaction]] = {
-    cacheService.getFullTransactionById(id).flatMap { txOpt =>
+    transService.getFullTransactionById(id).flatMap { txOpt =>
       if(txOpt.isEmpty) getFullTransaction(id)
       else Future(txOpt)
     }
@@ -48,5 +48,5 @@ class TransactionsDao @Inject()(dbService: DBService, cacheService: TransService
 
   def contractByTransaction(id: String): Future[List[Contract]] = dbService.runAsync(getContract(id))
 
-  def unconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] = cacheService.getUnconfirmedTransactions(from, to)
+  def unconfirmedTransactions(from: Int, to: Int): Future[List[DBTransaction]] = transService.getUnconfirmedTransactions(from, to)
 }

@@ -3,17 +3,15 @@ package controllers
 import javax.inject.Inject
 import models._
 import play.api.libs.circe.Circe
-
 import scala.concurrent._
 import io.circe.generic.auto._
 import io.circe.syntax._
-import models.dao.{BoxesDao, TransactionsDao}
+import models.dao.BoxesDao
 import play.api.mvc._
 import settings.Utils
 
 class WalletController @Inject()(cc: ControllerComponents,
-                                 boxesDao: BoxesDao,
-                                 transactionsDao: TransactionsDao)
+                                 boxesDao: BoxesDao)
                                 (implicit ex: ExecutionContext) extends AbstractController(cc) with ControllerHelpers with Circe {
 
   def info(contractHash: String, from: Int, to: Int): Action[AnyContent] = Action.async {

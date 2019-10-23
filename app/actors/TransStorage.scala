@@ -6,16 +6,13 @@ import javax.inject.Inject
 import models.{FullFilledTransaction, _}
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
 import play.api.Logger
-import settings.ExplorerSettings
+import settings.Settings
 
 import scala.collection.mutable
 import scala.concurrent.duration._
 
-class TransStorage @Inject()(settings: ExplorerSettings) extends Actor with Timers {
+class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
-  Logger.info("TransStorage")
-
-  //TODO: store in sorted list, iterate until cond
   var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction]()
 
   object Timer
@@ -45,7 +42,7 @@ class TransStorage @Inject()(settings: ExplorerSettings) extends Actor with Time
     case Tick =>
       val timestamp = System.currentTimeMillis()
       val expiredTxIds = unconfTranscactions.values
-        .filter(tx => timestamp - tx.transaction.timestamp > settings.cache.unconfirmedTransactionExpiredInterval.toMillis)
+        .filter(tx => timestamp - tx.transaction.timestamp > settings.trans.unconfirmedTransactionExpiredInterval.toMillis)
         .map(_.transaction.id)
       expiredTxIds.foreach(unconfTranscactions.remove(_))
   }
