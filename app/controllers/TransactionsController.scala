@@ -8,11 +8,10 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TransactionsController @Inject()(cc: ControllerComponents,
-                                       transactionsDao: TransactionsDao)
-                                      (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
+class TransactionsController @Inject()(cc: ControllerComponents, transactionsDao: TransactionsDao)(implicit ex: ExecutionContext)
+  extends AbstractController(cc) with Circe {
 
-  val TRANSACTION_PER_PAGE = 10
+  val TRANSACTIONS_PER_PAGE = 50
 
   def getTransaction(txId: String): Action[AnyContent] = Action.async {
     transactionsDao.fullTransactionById(txId).map {
@@ -22,8 +21,8 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   }
 
   def getUnconfirmedTransactions(page: Int): Action[AnyContent] = Action.async {
-    val from = page * TRANSACTION_PER_PAGE
-    val to = (page + 1) * TRANSACTION_PER_PAGE
+    val from = page * TRANSACTIONS_PER_PAGE
+    val to = (page + 1) * TRANSACTIONS_PER_PAGE
     transactionsDao.unconfirmedTransactions(from, to).map { txs =>
       Ok(views.html.transactions(txs, page))
     }
