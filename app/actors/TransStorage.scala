@@ -13,43 +13,44 @@ import scala.concurrent.duration._
 
 class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
-  var unconfTranscactions: mutable.Map[String, FullFilledTransaction] = mutable.Map[String, FullFilledTransaction]()
+  val transactions: mutable.Map[String, FullFilledTransaction] = mutable.Map.empty[String, FullFilledTransaction]
 
   object Timer
-  object Tick
 
   timers.startPeriodicTimer(Timer, Tick, 10 seconds)
 
   def receive: Receive = {
     case tx: Transaction =>
-      unconfTranscactions += tx.encodedId -> FullFilledTransaction(tx)
+      transactions += tx.encodedId -> FullFilledTransaction(tx)
 
     case TransactionsQ(from, to) =>
       val fromBound = if (from >= 0) from else 0
-      val toBound = if (to <= unconfTranscactions.size) to else unconfTranscactions.size
+      val toBound = if (to <= transactions.size) to else transactions.size
 
-      val txs = unconfTranscactions.values.toList
+      val txs = transactions.values.toList
         .sortBy(-_.transaction.timestamp)
         .slice(if (fromBound <= toBound) fromBound else toBound, toBound)
       sender ! TransactionsA(txs)
 
     case TransactionByIdQ(id) =>
-      sender ! TransactionByIdA(unconfTranscactions.get(id))
+      sender ! TransactionByIdA(transactions.get(id))
 
     case RemoveConfirmedTransactions(txIds) =>
-      txIds.foreach(id => unconfTranscactions.remove(id))
+      txIds.foreach(id => transactions.remove(id))
 
     case Tick =>
       val timestamp = System.currentTimeMillis()
-      val expiredTxIds = unconfTranscactions.values
+      val expiredTxIds = transactions.values
         .filter(tx => timestamp - tx.transaction.timestamp > settings.trans.unconfirmedTransactionExpiredInterval.toMillis)
         .map(_.transaction.id)
-      expiredTxIds.foreach(unconfTranscactions.remove(_))
+      expiredTxIds.foreach(transactions.remove(_))
   }
 
 }
 
 object TransStorage {
+  case object Tick
+
   case class TransactionsQ(from: Int, to: Int)
   case class TransactionsA(txs: List[FullFilledTransaction])
 

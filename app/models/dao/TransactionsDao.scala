@@ -18,7 +18,7 @@ class TransactionsDao @Inject()(dbService: DBService, transService: TransService
   def transactionById(id: String): Future[Option[DBTransaction]] = {
     transService.getTransactionById(id).flatMap { txOpt =>
       if(txOpt.isEmpty) dbService.runAsync(getTransactionById(id))
-      else Future(txOpt)
+      else Future.successful(txOpt)
     }
   }
 
@@ -34,13 +34,13 @@ class TransactionsDao @Inject()(dbService: DBService, transService: TransService
           contract <- contractF
         } yield Some(FullFilledTransaction(tx, inputs, outputs, contract))
 
-      case _ => Future(Option.empty[FullFilledTransaction])
+      case _ => Future.successful(Option.empty[FullFilledTransaction])
     }
 
   def fullTransactionById(id: String): Future[Option[FullFilledTransaction]] = {
     transService.getFullTransactionById(id).flatMap { txOpt =>
       if(txOpt.isEmpty) getFullTransaction(id)
-      else Future(txOpt)
+      else Future.successful(txOpt)
     }
   }
 
