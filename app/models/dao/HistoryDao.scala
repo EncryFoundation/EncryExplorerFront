@@ -1,8 +1,10 @@
-package models
+package models.dao
 
 import javax.inject.Inject
-import models.database.{DBService, NodeQueries}
+import models.{Header, Node}
 import models.database.HeaderQueries._
+import models.database.NodeQueries
+import models.service.DBService
 
 import scala.concurrent.{ExecutionContext, Future}
 

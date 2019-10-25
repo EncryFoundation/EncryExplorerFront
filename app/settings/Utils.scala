@@ -1,7 +1,7 @@
 package settings
 
-import org.encryfoundation.common.Algos
-import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import org.encryfoundation.common.modifiers.mempool.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import org.encryfoundation.common.utils.Algos
 import scorex.crypto.encode.Base16
 
 object Utils {
