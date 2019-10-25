@@ -1,4 +1,5 @@
 @import java.util.Date
+@import settings.Utils.EttTokenId
 @(tx: FullFilledTransaction)
 
 <html>
@@ -392,7 +393,7 @@
                                         <td align="right">
                                                 <span class="badge badge-dot mr-4">
                                                 @{
-                                                    if(transfer._2 == "487291c237b68dd2ab213be6b5d1174666074a5afab772b600ea14e8285affab")
+                                                    if(transfer._2 == EttTokenId)
                                                     "Encry Coin" else transfer._2
                                                 }
                                                 </span>
