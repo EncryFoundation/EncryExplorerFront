@@ -12,8 +12,7 @@ import scala.concurrent.duration._
 
 class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
-  val transTs: mutable.TreeMap[Long, FullFilledTransaction] = mutable.TreeMap.empty[Long, FullFilledTransaction]
-  val transIds: mutable.TreeMap[String, Long] = mutable.TreeMap.empty[String, Long]
+  val transactions: mutable.LinkedHashMap[String, FullFilledTransaction] = mutable.LinkedHashMap.empty[String, FullFilledTransaction]
 
   object Timer
 
@@ -21,38 +20,31 @@ class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
   def receive: Receive = {
     case tx: Transaction =>
-      transTs += tx.timestamp -> FullFilledTransaction(tx)
-      transIds += tx.encodedId -> tx.timestamp
+      transactions += tx.encodedId -> FullFilledTransaction(tx)
 
     case TransactionsQ(from, to) =>
       val fromBound = if (from >= 0) from else 0
-      val toBound = if (to <= transTs.size) to else transTs.size
-      val fromBoundR = transTs.size - toBound
-      val toBoundR = transTs.size - (if (fromBound <= toBound) fromBound else toBound)
-
-      val txs = transTs.values.slice(fromBoundR, toBoundR).toList.reverse
+      val toBound = if (to <= transactions.size) to else transactions.size
+      val fromBoundR = transactions.size - toBound
+      val toBoundR = transactions.size - (if (fromBound <= toBound) fromBound else toBound)
+      val txs = transactions.values.slice(fromBoundR, toBoundR).toList.reverse
       sender ! TransactionsA(txs)
 
     case TransactionByIdQ(id) =>
-      val tx = transIds.get(id).flatMap(transTs.get)
-      sender ! TransactionByIdA(tx)
+      sender ! TransactionByIdA(transactions.get(id))
 
     case RemoveConfirmedTransactions(txIds) =>
-      val tsList = txIds.flatMap(transIds.get)
-      tsList.foreach(ts => transTs.remove(ts))
-      txIds.foreach(id => transIds.remove(id))
+      txIds.foreach(id => transactions.remove(id))
 
     case Tick =>
       val timestamp = System.currentTimeMillis()
 
-      transTs.takeWhile { case (ts, _) =>
-        timestamp - ts > settings.trans.unconfirmedTransactionExpiredInterval.toMillis
-      }.foreach { case (ts, tx) =>
-        transIds.remove(tx.transaction.id)
-        transTs.remove(ts)
+      transactions.takeWhile { case (_, tx) =>
+        timestamp - tx.transaction.timestamp > settings.trans.unconfirmedTransactionExpiredInterval.toMillis
+      }.foreach { case (_, tx) =>
+        transactions.remove(tx.transaction.id)
       }
   }
-
 }
 
 object TransStorage {
