@@ -1,11 +1,10 @@
 package actors
 
 import actors.TransStorage._
-import akka.actor.{Actor, Props, Timers}
+import akka.actor.{Actor, Timers}
 import javax.inject.Inject
-import models.{FullFilledTransaction, _}
+import models.FullFilledTransaction
 import org.encryfoundation.common.modifiers.mempool.transaction.Transaction
-import play.api.Logger
 import settings.Settings
 
 import scala.collection.mutable
@@ -13,7 +12,8 @@ import scala.concurrent.duration._
 
 class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
-  val transactions: mutable.Map[String, FullFilledTransaction] = mutable.Map.empty[String, FullFilledTransaction]
+  val transTs: mutable.TreeMap[Long, FullFilledTransaction] = mutable.TreeMap.empty[Long, FullFilledTransaction]
+  val transIds: mutable.TreeMap[String, Long] = mutable.TreeMap.empty[String, Long]
 
   object Timer
 
@@ -21,29 +21,36 @@ class TransStorage @Inject()(settings: Settings) extends Actor with Timers {
 
   def receive: Receive = {
     case tx: Transaction =>
-      transactions += tx.encodedId -> FullFilledTransaction(tx)
+      transTs += tx.timestamp -> FullFilledTransaction(tx)
+      transIds += tx.encodedId -> tx.timestamp
 
     case TransactionsQ(from, to) =>
       val fromBound = if (from >= 0) from else 0
-      val toBound = if (to <= transactions.size) to else transactions.size
+      val toBound = if (to <= transTs.size) to else transTs.size
+      val fromBoundR = transTs.size - toBound
+      val toBoundR = transTs.size - (if (fromBound <= toBound) fromBound else toBound)
 
-      val txs = transactions.values.toList
-        .sortBy(-_.transaction.timestamp)
-        .slice(if (fromBound <= toBound) fromBound else toBound, toBound)
+      val txs = transTs.values.slice(fromBoundR, toBoundR).toList.reverse
       sender ! TransactionsA(txs)
 
     case TransactionByIdQ(id) =>
-      sender ! TransactionByIdA(transactions.get(id))
+      val tx = transIds.get(id).flatMap(transTs.get)
+      sender ! TransactionByIdA(tx)
 
     case RemoveConfirmedTransactions(txIds) =>
-      txIds.foreach(id => transactions.remove(id))
+      val tsList = txIds.flatMap(transIds.get)
+      tsList.foreach(ts => transTs.remove(ts))
+      txIds.foreach(id => transIds.remove(id))
 
     case Tick =>
       val timestamp = System.currentTimeMillis()
-      val expiredTxIds = transactions.values
-        .filter(tx => timestamp - tx.transaction.timestamp > settings.trans.unconfirmedTransactionExpiredInterval.toMillis)
-        .map(_.transaction.id)
-      expiredTxIds.foreach(transactions.remove(_))
+
+      transTs.takeWhile { case (ts, _) =>
+        timestamp - ts > settings.trans.unconfirmedTransactionExpiredInterval.toMillis
+      }.foreach { case (ts, tx) =>
+        transIds.remove(tx.transaction.id)
+        transTs.remove(ts)
+      }
   }
 
 }
