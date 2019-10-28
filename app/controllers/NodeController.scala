@@ -1,7 +1,8 @@
 package controllers
 
 import javax.inject.{Inject, _}
-import models.{HistoryDao, Node}
+import models.Node
+import models.dao.HistoryDao
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
 
@@ -13,7 +14,7 @@ class NodeController @Inject()(cc: ControllerComponents,
   def nodes(): Action[AnyContent] = Action.async {
     historyDao.getAllNodes.map {
       case Nil => NotFound
-      case node: List[Node] => Ok(views.html.nodeInfo(node))
+      case node: List[Node] => Ok(views.html.nodes(node))
     }
   }
 }

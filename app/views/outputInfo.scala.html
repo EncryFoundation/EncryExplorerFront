@@ -1,5 +1,5 @@
 @import java.util.Date
-@(output: Output)
+@(output: DBOutput)
 
 <html>
 
@@ -262,7 +262,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @output.proposition
+                                            @output.proposition.contractHash
                                             </td>
                                         </tr>
                                         <tr>

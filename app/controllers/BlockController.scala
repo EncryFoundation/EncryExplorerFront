@@ -1,7 +1,8 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models._
+import models.{Block, DBTransaction, Header}
+import models.dao.{HistoryDao, TransactionsDao}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import scala.concurrent.{ExecutionContext, Future}
@@ -21,7 +22,7 @@ class BlockController @Inject()(cc: ControllerComponents,
 
   def getBlock(id: String): Future[Option[Block]] = {
     val headerF: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadF: Future[List[Transaction]] = transactionsDao.transactionsByBlock(id)
+    val payloadF: Future[List[DBTransaction]] = transactionsDao.transactionsByBlock(id)
     for {
       headerOpt <- headerF
       payload <- payloadF

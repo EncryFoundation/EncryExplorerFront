@@ -2,8 +2,7 @@ package models.database
 
 import doobie._
 import doobie.implicits._
-import models.{Transaction, Wallet}
-
+import models.{DBTransaction, Wallet}
 
 object WalletQueries {
 
@@ -13,7 +12,7 @@ object WalletQueries {
   def getTxsIdByHash(address: String): ConnectionIO[List[String]] =
     sql"SELECT txId FROM outputs WHERE contractHash = $address order by idx DESC LIMIT 50".query[String].to[List]
 
-  def getLastTxsByHash(txId: String): ConnectionIO[Transaction] =
-    sql"SELECT * FROM transactions WHERE id = $txId ORDER BY timestamp DESC LIMIT 50".query[Transaction].unique
+  def getLastTxsByHash(txId: String): ConnectionIO[DBTransaction] =
+    sql"SELECT * FROM transactions WHERE id = $txId ORDER BY timestamp DESC LIMIT 50".query[DBTransaction].unique
 
 }

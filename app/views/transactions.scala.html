@@ -1,81 +1,61 @@
 @import java.util.Date
-@(wallet: List[Wallet], transaction: List[DBTransaction])
-@content_main {
+@(txs: List[DBTransaction], page: Int)
+@main {
+
 <div class="main-content">
     <!-- Top navbar -->
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
         <div class="container-fluid">
             <!-- Brand -->
             <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="@routes.HomeController.index()">
-                Wallet Info</a>
+                Encry Explorer</a>
         </div>
     </nav>
     <!-- Header -->
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
     <!-- Page content -->
     <div class="container-fluid mt--7">
-        <!-- Table -->
         <div class="row mt-5">
             <div class="col-xl-12 mb-5 mb-xl-0">
                 <div class="card shadow">
                     <div class="card-header border-0">
-                        <h4 class="mb-0">Contract Hash / @for(wal <- wallet){
-                            <td>
-                                    <span class="badge badge-dot mr-4">
-                                    @wal.hash
-                                    </span>
-                            </td>
-                            }
-                        </h4>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">Transactions</h3>
+                            </div>
+                            <nav aria-label="...">
+                                <ul id="demo" class="pagination justify-content-end mb-0">
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@routes.TransactionsController.getUnconfirmedTransactions(if(page > 0) page - 1 else page)"
+                                           tabindex="-1">
+                                            <i class="fas fa-angle-left"></i>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@routes.TransactionsController.getUnconfirmedTransactions(if(txs.nonEmpty) page + 1 else page)">
+                                            <i class="fas fa-angle-right"></i>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Token</th>
-                                <th scope="col">Balance</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @for(wal <- wallet) {
-                            <tr>
-                                <td>
-                                                    <span class="badge badge-dot mr-4">
-                                                    @wal.tokenId
-                                                    </span>
-                                </td>
-                                <td>
-                                                    <span class="badge badge-dot mr-4">
-                                                    @wal.amount
-                                                    </span>
-                                </td>
-                            </tr>
-                            }
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-xl-12 mb-5 mb-xl-0">
-                <div class="card shadow">
-                    <div class="card-header border-0">
-                        <h3 class="mb-0">Last 50 blocks</h3>
-                    </div>
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                             <tr>
                                 <th scope="col">Transaction id</th>
-                                <th scope="col">Transaction timestamp</th>
-                                <th scope="col">Transaction fee</th>
-                                <th scope="col">is CoinBase</th>
+                                <th scope="col">timestamp</th>
+                                <th scope="col">fee</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @for(tx <- transaction) {
+                            @for(tx <- txs) {
                             <tr>
                                 <td>
                                     <a href="@routes.TransactionsController.getTransaction(tx.id)" class="nav-link">
@@ -91,13 +71,6 @@
                                 <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @tx.fee
-                                                </span>
-                                </td>
-                                <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @{
-                                                    if(tx.isCoinbase) "Yes" else None
-                                                }
                                                 </span>
                                 </td>
                             </tr>
@@ -140,4 +113,5 @@
         </footer>
     </div>
 </div>
+
 }

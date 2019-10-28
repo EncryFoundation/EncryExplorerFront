@@ -1,11 +1,10 @@
 package controllers
 
-import models._
 import javax.inject.{Inject, Singleton}
-import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import models.dao.{BoxesDao, HistoryDao, TransactionsDao}
+import models.{Block, Contract, DBInput, DBOutput, DBTransaction, FullFilledTransaction, Header, Wallet}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
-import scorex.crypto.encode.Base16
 import settings.Utils
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,41 +15,14 @@ class SearchController @Inject()(cc: ControllerComponents,
                                  boxesDao: BoxesDao)
                                 (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def getBlock(id: String): Future[Option[Block]] = {
-    val headerF: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadF: Future[List[Transaction]] = transactionsDao.transactionsByBlock(id)
-    for {
-      headerOpt <- headerF
-      payload   <- payloadF
-    } yield headerOpt match {
-      case Some(header) => Some(Block(header, payload))
-      case _ => None
-    }
-  }
-
-  def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
-    transactionsDao.transactionById(id).flatMap {
-      case Some(tx) =>
-        val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
-        val inputsF:  Future[List[Input]]  = transactionsDao.inputsByTransaction(tx.id)
-        val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
-        for {
-          outputs  <- outputsF
-          inputs   <- inputsF
-          contract <- contractF
-        } yield  Some(FullFilledTransaction(tx, inputs, outputs, contract))
-
-      case _ => Future(Option.empty[FullFilledTransaction])
-    }
-
   def search(id: String): Action[AnyContent] = Action.async {
 
     val blockF: Future[Option[Block]] = getBlock(id)
     val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
-    val outputF: Future[Option[Output]] = transactionsDao.outputById(id)
+    val outputF: Future[Option[DBOutput]] = transactionsDao.outputById(id)
     val walletF: Future[List[Wallet]] = boxesDao.getWalletByHash(Utils.contractHashByAddress(id))
     val txIdF: Future[List[String]] = boxesDao.getTxsIdByHash(Utils.contractHashByAddress(id))
-    val txsF: Future[List[Transaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
+    val txsF: Future[List[DBTransaction]] = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
 
     val result = for {
       blockOpt       <- blockF

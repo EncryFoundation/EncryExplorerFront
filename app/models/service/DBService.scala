@@ -1,4 +1,4 @@
-package models.database
+package models.service
 
 import cats.effect.IO
 import doobie.free.connection.ConnectionIO
@@ -7,10 +7,10 @@ import doobie.implicits._
 import javax.inject.Inject
 import play.api.Configuration
 import doobie.hikari.implicits._
-import settings.ExplorerSettings
+import settings.Settings
 import scala.concurrent.Future
 
-class DBService @Inject()(config: Configuration, settings: ExplorerSettings) {
+class DBService @Inject()(config: Configuration, settings: Settings) {
 
   def runAsync[T](io: ConnectionIO[T]): Future[T] = (for {
     pool <- newHikariTransactor[IO](

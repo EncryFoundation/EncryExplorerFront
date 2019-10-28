@@ -1,36 +1,31 @@
 package controllers
 
-import models.{Contract, FullFilledTransaction, Input, Output, TransactionsDao}
 import javax.inject.{Inject, Singleton}
+import models.dao.TransactionsDao
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class TransactionsController @Inject()(cc: ControllerComponents,
-                             transactionsDao: TransactionsDao)
-                            (implicit ex: ExecutionContext) extends AbstractController(cc)  with Circe {
+class TransactionsController @Inject()(cc: ControllerComponents, transactionsDao: TransactionsDao)(implicit ex: ExecutionContext)
+  extends AbstractController(cc) with Circe {
 
-  def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
-  transactionsDao.transactionById(id).flatMap {
-      case Some(tx) =>
-        val outputsF: Future[List[Output]] = transactionsDao.outputsByTransaction(tx.id)
-        val inputsF:  Future[List[Input]]  = transactionsDao.inputsByTransaction(tx.id)
-        val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
-        for {
-          outputs  <- outputsF
-          inputs   <- inputsF
-          contract <- contractF
-        } yield  Some(FullFilledTransaction(tx, inputs, outputs, contract))
-
-      case _ => Future(Option.empty[FullFilledTransaction])
-    }
+  val TRANSACTIONS_PER_PAGE = 50
 
   def getTransaction(txId: String): Action[AnyContent] = Action.async {
-    getFullTransaction(txId).map {
+    transactionsDao.fullTransactionById(txId).map {
       case Some(tx) => Ok(views.html.transactionInfo(tx))
-      case None     => NotFound
+      case None => NotFound
     }
   }
+
+  def getUnconfirmedTransactions(page: Int): Action[AnyContent] = Action.async {
+    val from = page * TRANSACTIONS_PER_PAGE
+    val to = (page + 1) * TRANSACTIONS_PER_PAGE
+    transactionsDao.unconfirmedTransactions(from, to).map { txs =>
+      Ok(views.html.transactions(txs, page))
+    }
+  }
+
 }
