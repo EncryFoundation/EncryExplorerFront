@@ -15,33 +15,6 @@ class SearchController @Inject()(cc: ControllerComponents,
                                  boxesDao: BoxesDao)
                                 (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def getBlock(id: String): Future[Option[Block]] = {
-    val headerF: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadF: Future[List[DBTransaction]] = transactionsDao.transactionsByBlock(id)
-    for {
-      headerOpt <- headerF
-      payload   <- payloadF
-    } yield headerOpt match {
-      case Some(header) => Some(Block(header, payload))
-      case _ => None
-    }
-  }
-
-  def getFullTransaction(id: String): Future[Option[FullFilledTransaction]] =
-    transactionsDao.transactionById(id).flatMap {
-      case Some(tx) =>
-        val outputsF: Future[List[DBOutput]] = transactionsDao.outputsByTransaction(tx.id)
-        val inputsF:  Future[List[DBInput]]  = transactionsDao.inputsByTransaction(tx.id)
-        val contractF: Future[List[Contract]] = transactionsDao.contractByTransaction(tx.id)
-        for {
-          outputs  <- outputsF
-          inputs   <- inputsF
-          contract <- contractF
-        } yield  Some(FullFilledTransaction(tx, inputs, outputs, contract))
-
-      case _ => Future(Option.empty[FullFilledTransaction])
-    }
-
   def search(id: String): Action[AnyContent] = Action.async {
 
     val blockF: Future[Option[Block]] = getBlock(id)
