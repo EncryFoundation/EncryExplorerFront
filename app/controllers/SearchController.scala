@@ -1,6 +1,5 @@
 package controllers
 
-import com.typesafe.scalalogging.StrictLogging
 import models._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.circe.Circe
@@ -16,7 +15,7 @@ class SearchController @Inject()(cc: ControllerComponents,
                                  transactionsDao: TransactionsDao,
                                  historyDao: HistoryDao,
                                  boxesDao: BoxesDao)
-                                (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe with StrictLogging {
+                                (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def getBlock(id: String): Future[Option[Block]] = {
     val headerF: Future[Option[Header]] = historyDao.findHeader(id)
