@@ -46,30 +46,29 @@ class SearchController @Inject()(cc: ControllerComponents,
 
   def search(id: String): Action[AnyContent] = Action.async {
 
-    val blockF: Future[Option[Block]]                       = getBlock(id)
-    val transactionF: Future[Option[FullFilledTransaction]] = getFullTransaction(id)
-    val outputF: Future[Option[Output]]                     = transactionsDao.outputById(id)
-    val walletF: Future[List[Wallet]]                       = Future
-                                                                .fromTry(Try(Utils.contractHashByAddress(id)))
-                                                                .flatMap(boxesDao.getWalletByHash)
-                                                                .recover {
-                                                                  case NonFatal(_) => List.empty[Wallet]
-                                                                }
-    val txIdF: Future[List[String]]                         = Future
-                                                                .fromTry(Try(Utils.contractHashByAddress(id)))
-                                                                .flatMap(boxesDao.getTxsIdByHash)
-                                                                .recover {
-                                                                  case NonFatal(_) => List.empty[String]
-                                                                }
-    val txsF: Future[List[Transaction]]                     = txIdF.flatMap(x => Future.sequence(x.map(id => boxesDao.getLastTxById(id))))
+    def retrieveWallet(id: String): Future[List[Wallet]] = Future
+      .fromTry(Try(Utils.contractHashByAddress(id)))
+      .flatMap(boxesDao.getWalletByHash)
+      .recover {
+        case NonFatal(_) => List.empty[Wallet]
+      }
+
+    def retrieveTxs(id: String): Future[List[Transaction]] = Future
+      .fromTry(Try(Utils.contractHashByAddress(id)))
+      .flatMap(boxesDao.getTxsIdByHash)
+      .recover {
+        case NonFatal(_) => List.empty[String]
+      }.flatMap { tx =>
+        Future.sequence(tx.map(id => boxesDao.getLastTxById(id)))
+      }
 
     val result = for {
-      blockOpt       <- blockF
-      transactionOpt <- transactionF
-      outputOpt      <- outputF
-      walletOpt      <- walletF
-      txsOpt         <- txsF
-    } yield (blockOpt, transactionOpt, outputOpt, walletOpt, txsOpt)
+      blockOpt       <- getBlock(id)
+      transactionOpt <- if (blockOpt.isEmpty) getFullTransaction(id) else Future.successful(None)
+      outputOpt      <- if (transactionOpt.isEmpty) transactionsDao.outputById(id) else Future.successful(None)
+      wallet         <- if (transactionOpt.isEmpty) retrieveWallet(id) else Future.successful(List.empty[Wallet])
+      txs            <- if (wallet.isEmpty) retrieveTxs(id) else Future.successful(List.empty[Transaction])
+    } yield (blockOpt, transactionOpt, outputOpt, wallet, txs)
 
     result.map {
       case (blockOpt, _, _,_,_) if blockOpt.nonEmpty                            => Ok(views.html.blockInfo(blockOpt.get))
