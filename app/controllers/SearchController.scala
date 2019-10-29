@@ -49,15 +49,15 @@ class SearchController @Inject()(cc: ControllerComponents,
     def retrieveWallet(id: String): Future[List[Wallet]] = Future
       .fromTry(Try(Utils.contractHashByAddress(id)))
       .flatMap(boxesDao.getWalletByHash)
-      .recover {
-        case NonFatal(_) => List.empty[Wallet]
+      .recoverWith {
+        case NonFatal(_) => boxesDao.getWalletByHash(id)
       }
 
     def retrieveTxs(id: String): Future[List[Transaction]] = Future
       .fromTry(Try(Utils.contractHashByAddress(id)))
       .flatMap(boxesDao.getTxsIdByHash)
-      .recover {
-        case NonFatal(_) => List.empty[String]
+      .recoverWith {
+        case NonFatal(_) => boxesDao.getTxsIdByHash(id)
       }.flatMap { tx =>
         Future.sequence(tx.map(id => boxesDao.getLastTxById(id)))
       }
@@ -66,8 +66,8 @@ class SearchController @Inject()(cc: ControllerComponents,
       blockOpt       <- getBlock(id)
       transactionOpt <- if (blockOpt.isEmpty) getFullTransaction(id) else Future.successful(None)
       outputOpt      <- if (transactionOpt.isEmpty) transactionsDao.outputById(id) else Future.successful(None)
-      wallet         <- if (transactionOpt.isEmpty) retrieveWallet(id) else Future.successful(List.empty[Wallet])
-      txs            <- if (wallet.isEmpty) retrieveTxs(id) else Future.successful(List.empty[Transaction])
+      wallet         <- if (outputOpt.isEmpty) retrieveWallet(id).map(_.filter(w => w.amount != 0 && w.tokenId.nonEmpty)) else Future.successful(List.empty[Wallet])
+      txs            <- if (outputOpt.isEmpty) retrieveTxs(id) else Future.successful(List.empty[Transaction])
     } yield (blockOpt, transactionOpt, outputOpt, wallet, txs)
 
     result.map {
