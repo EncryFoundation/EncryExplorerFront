@@ -332,13 +332,18 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @{(BigDecimal(output.value) / 100000000).toString()}
+                                                    @{
+                                                        if(output.tokenId == ETTid)
+                                                            (BigDecimal(output.value) / 100000000).toString()
+                                                        else
+                                                            output.value
+                                                    }
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @{
-                                                    if(output.tokenId == "487291c237b68dd2ab213be6b5d1174666074a5afab772b600ea14e8285affab")
+                                                    if(output.tokenId == ETTid)
                                                     "Encry Coin" else output.tokenId
                                                 }
                                                 </span>
