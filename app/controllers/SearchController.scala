@@ -71,10 +71,10 @@ class SearchController @Inject()(cc: ControllerComponents,
     } yield (blockOpt, transactionOpt, outputOpt, wallet, txs)
 
     result.map {
-      case (blockOpt, _, _,_,_) if blockOpt.nonEmpty                            => Ok(views.html.blockInfo(blockOpt.get))
-      case (_, transactionOpt, _, _,_) if transactionOpt.nonEmpty               => Ok(views.html.transactionInfo(transactionOpt.get))
-      case (_,_,outputOpt,_,_) if outputOpt.nonEmpty                            => Ok(views.html.outputInfo(outputOpt.get))
-      case (_, _, _, walletOpt,txsOpt) if walletOpt.nonEmpty && txsOpt.nonEmpty => Ok(views.html.wallet(walletOpt, txsOpt))
+      case (blockOpt, _, _,_,_) if blockOpt.nonEmpty                             => Ok(views.html.blockInfo(blockOpt.get))
+      case (_, transactionOpt, _, _,_) if transactionOpt.nonEmpty                => Ok(views.html.transactionInfo(transactionOpt.get))
+      case (_,_,outputOpt,_,_) if outputOpt.nonEmpty                             => Ok(views.html.outputInfo(outputOpt.get))
+      case (_, _, _, walletOpt, txsOpt) if walletOpt.nonEmpty && txsOpt.nonEmpty => Ok(views.html.wallet(walletOpt, txsOpt))
       case _ => NotFound
     }
   }
