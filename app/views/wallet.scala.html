@@ -213,7 +213,7 @@
                                                 </td>
                                                 <td>
                                                     <span class="badge badge-dot mr-4">
-                                                    @wal.amount
+                                                    @{BigDecimal(wal.amount) / 100000000}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -257,7 +257,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @tx.fee
+                                                @{BigDecimal(tx.fee) / 100000000}
                                                 </span>
                                             </td>
                                             <td>
