@@ -326,7 +326,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.minerReward
+                                            @{(BigDecimal(block.header.minerReward) / 100000000)}
                                             </td>
                                         </tr>
                                     </tbody>
