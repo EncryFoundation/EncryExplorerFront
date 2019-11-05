@@ -15,7 +15,7 @@ case class Output(idx: Int,
                   proposition: Proposition,
                   data: String,
                   isActive: Boolean,
-                  minerAddress: String)
+                  address: String)
 
 object Output{
 

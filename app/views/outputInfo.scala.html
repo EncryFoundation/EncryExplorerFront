@@ -226,7 +226,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @output.value
+                                            @{BigDecimal(output.value) / 100000000}
                                             </td>
                                         </tr>
                                         <tr>
@@ -286,7 +286,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @output.minerAddress
+                                            @output.address
                                             </td>
                                         </tr>
                                     </tbody>

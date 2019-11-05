@@ -338,7 +338,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @block.header.minerReward
+                                            @{s"${BigDecimal(block.header.minerReward) / 100000000} ETT"}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -380,7 +380,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @tx.fee
+                                                @tx.formatedFee
                                                 </span>
                                             </td>
                                             <td>
