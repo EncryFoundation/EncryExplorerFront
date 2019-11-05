@@ -59,7 +59,6 @@ $(document).ready(function () {
 function fire_ajax_submit() {
 
     var search = {};
-    search["cityName"] = $("#cityName").value;
     var inputValue = document.getElementById("mySearch").value;
 
     var modalW = '<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
@@ -96,11 +95,3 @@ function fire_ajax_submit() {
         }
     });
 }
-
-function dynamicallyLoadScript(url) {
-    var script = document.createElement("script");  // create a script DOM node
-    script.src = url;  // set its src to the provided URL
-
-    document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
-}
-
