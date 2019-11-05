@@ -1,4 +1,6 @@
 @import java.util.Date
+@import settings.Utils.ETTid
+
 @(output: Output)
 
 <html>
@@ -226,7 +228,12 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @{BigDecimal(output.value) / 100000000}
+                                                @{
+                                                    if(output.tokenId == ETTid)
+                                                        (BigDecimal(output.value) / 100000000).toString()
+                                                    else
+                                                        output.value
+                                                }
                                             </td>
                                         </tr>
                                         <tr>
