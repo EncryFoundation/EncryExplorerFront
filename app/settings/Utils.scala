@@ -8,7 +8,7 @@ object Utils {
 
   val IntrinsicTokenId: Array[Byte] = Algos.hash("intrinsic_token")
 
-  val EttTokenId: String = Algos.encode(IntrinsicTokenId)
+  val ETTid: String = Algos.encode(IntrinsicTokenId)
 
   def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
     case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex

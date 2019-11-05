@@ -1,4 +1,5 @@
 @import java.util.Date
+@import settings.Utils.ETTid
 @(tx: FullFilledTransaction)
 
 <html>
@@ -213,7 +214,7 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @tx.transaction.fee
+                                                @{tx.fee}
                                             </td>
                                         </tr>
                                         <tr>
@@ -331,13 +332,18 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @output.value
+                                                    @{
+                                                        if(output.tokenId == ETTid)
+                                                            (BigDecimal(output.value) / 100000000).toString()
+                                                        else
+                                                            output.value
+                                                    }
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
                                                 @{
-                                                    if(output.tokenId == "487291c237b68dd2ab213be6b5d1174666074a5afab772b600ea14e8285affab")
+                                                    if(output.tokenId == ETTid)
                                                     "Encry Coin" else output.tokenId
                                                 }
                                                 </span>
@@ -349,7 +355,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @output.minerAddress
+                                                @output.address
                                                 </span>
                                             </td>
                                             <td>
@@ -358,6 +364,51 @@
                                                 </span>
                                             </td>
                                         </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Table -->
+                <div class="row mt-5">
+                    <div class="col-xl-12 mb-5 mb-xl-0">
+                        <div class="card shadow">
+                            <div class="card-header border-0">
+                                <h3 class="mb-0">Transaction Transfers</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">To</th>
+                                        <th scope="col">Coin</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for(transfer <- tx.transfers) {
+                                    <tr>
+                                        <td>
+                                                <span class="badge badge-dot mr-4">
+                                                @transfer._1
+                                                </span>
+                                        </td>
+                                        <td align="right">
+                                                <span class="badge badge-dot mr-4">
+                                                @{
+                                                    if(transfer._2 == ETTid)
+                                                    "Encry Coin" else transfer._2
+                                                }
+                                                </span>
+                                        </td>
+                                        <td align="center">
+                                                <span class="badge badge-dot mr-4">
+                                                @transfer._3
+                                                </span>
+                                        </td>
+                                    </tr>
                                     }
                                     </tbody>
                                 </table>

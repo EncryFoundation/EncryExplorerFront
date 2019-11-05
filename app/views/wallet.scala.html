@@ -1,4 +1,5 @@
 @import java.util.Date
+@import settings.Utils.ETTid
 @(wallet: List[Wallet], transaction: List[Transaction])
 
 <html>
@@ -213,7 +214,10 @@
                                                 </td>
                                                 <td>
                                                     <span class="badge badge-dot mr-4">
-                                                    @wal.amount
+                                                    @{
+                                                        if (wal.tokenId == ETTid) BigDecimal(wal.amount) / 100000000
+                                                        else wal.amount
+                                                     }
                                                     </span>
                                                 </td>
                                             </tr>
@@ -257,7 +261,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
-                                                @tx.fee
+                                                @{tx.fee}
                                                 </span>
                                             </td>
                                             <td>

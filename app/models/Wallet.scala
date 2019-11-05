@@ -7,7 +7,7 @@ case class Wallet (hash: String,
                    tokenId: String)
 
 object Wallet{
-  val ett: String = Utils.EttTokenId
+  val ett: String = Utils.ETTid
   def apply(hash: String, amount: Long, tokenId: String): Wallet = new Wallet(
     hash,
     amount,
