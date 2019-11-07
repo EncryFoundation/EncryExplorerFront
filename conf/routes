@@ -7,3 +7,4 @@ GET        /search/:search                              controllers.SearchContro
 GET        /wallet/:contractHash                        controllers.WalletController.getWalletByAddress(contractHash: String)
 GET        /node                                        controllers.NodeController.nodes()
 GET        /:to                                         controllers.HomeController.listHeadersByHeightRangeApi(to: Int)
+GET        /output/:id                                  controllers.OutputController.getOutput(id: String)

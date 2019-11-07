@@ -326,9 +326,7 @@
                                     @for(output <- tx.output) {
                                         <tr>
                                             <td>
-                                                <span class="badge badge-dot mr-4">
-                                                @output.id
-                                                </span>
+                                                <a href="@routes.OutputController.getOutput(output.id)" class="nav-link" target="_blank">@output.id</a>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dot mr-4">
