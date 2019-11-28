@@ -59,8 +59,24 @@ $(document).ready(function () {
 function fire_ajax_submit() {
 
     var search = {};
-    search["cityName"] = $("#cityName").value;
     var inputValue = document.getElementById("mySearch").value;
+
+    var modalW = '<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                  '  <div class="modal-dialog" role="document">' +
+                  '    <div class="modal-content">' +
+                  '      <div class="modal-header">' +
+                  '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+                  '          <span aria-hidden="true">&times;</span>' +
+                  '        </button>' +
+                  '      </div>' +
+                  '      <div class="modal-body">' +
+                  '        Searching...' +
+                  '      </div>' +
+                  '    </div>' +
+                  '  </div>' +
+                  '/div>'
+
+    $(modalW).modal("show");
 
     $("#btn-search").prop("disabled", true);
 
@@ -69,11 +85,12 @@ function fire_ajax_submit() {
         url: "/search/" + inputValue,
         // dataType: 'json',
         success: function (data) {
-
+            $('#exampleModal').modal("hide");
             window.open('/search/' + inputValue);
 
         },
         error: function (e) {
+            $('#exampleModal').modal("hide");
             alert('Nothing has been matched, please try another Id');
         }
     });

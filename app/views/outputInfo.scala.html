@@ -1,4 +1,6 @@
 @import java.util.Date
+@import settings.Utils.ETTid
+
 @(output: Output)
 
 <html>
@@ -226,7 +228,12 @@
                                                 </div>
                                             </th>
                                             <td>
-                                            @{BigDecimal(output.value) / 100000000}
+                                                @{
+                                                    if(output.tokenId == ETTid)
+                                                        (BigDecimal(output.value) / 100000000).toString()
+                                                    else
+                                                        output.value
+                                                }
                                             </td>
                                         </tr>
                                         <tr>
@@ -281,12 +288,24 @@
                                             <th scope="row">
                                                 <div class="media align-items-center">
                                                     <div class="media-body">
-                                                        <span class="mb-0 text-sm">Miner Address</span>
+                                                        <span class="mb-0 text-sm">Address</span>
                                                     </div>
                                                 </div>
                                             </th>
                                             <td>
-                                            @output.address
+                                                @output.address
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">Active</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                                @output.isActive
                                             </td>
                                         </tr>
                                     </tbody>
